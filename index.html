@@ -69,6 +69,67 @@
   .winter-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #D8D0BE; padding-top: 2px; }
   .winter-row input { width: 15px; height: 15px; accent-color: var(--focus); }
 
+  /* ---- shopping trip bar ---- */
+  .trip-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: rgba(217,164,65,0.12);
+    border: 1px solid rgba(217,164,65,0.35);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin: 0 4px 22px;
+    font-size: 11.5px;
+    color: #EFE6D2;
+  }
+  .trip-bar button {
+    font-family: inherit;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    color: var(--counter-a);
+    background: var(--focus);
+    border: none;
+    border-radius: 3px;
+    padding: 7px 10px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .trip-bar button:hover { filter: brightness(1.08); }
+
+  /* ---- item picker ---- */
+  .picker {
+    background: rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 4px;
+    padding: 16px 18px 18px;
+    margin: 0 4px 32px;
+  }
+  .picker-title { font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: #C9C0AC; margin-bottom: 12px; }
+  .picker-selectall { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #D8D0BE; padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.16); }
+  .picker-selectall input { width: 15px; height: 15px; accent-color: var(--focus); }
+  .picker-list { max-height: 320px; overflow-y: auto; margin-bottom: 14px; }
+  .picker-item { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #D8D0BE; padding: 6px 2px; border-bottom: 1px dotted rgba(255,255,255,0.1); }
+  .picker-item:last-child { border-bottom: none; }
+  .picker-item input { width: 15px; height: 15px; accent-color: var(--focus); flex-shrink: 0; }
+  .picker-start-btn {
+    width: 100%;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: var(--counter-a);
+    background: var(--focus);
+    border: none;
+    border-radius: 3px;
+    padding: 11px;
+    cursor: pointer;
+  }
+  .picker-start-btn:hover { filter: brightness(1.08); }
+
   /* ---- receipt ---- */
   .receipt-slot { position: relative; margin: 0 0 44px; }
   .receipt {
@@ -187,6 +248,18 @@
       <p class="lede" id="lede">Loading your receipts…</p>
     </div>
 
+    <div class="trip-bar" id="trip-bar" hidden>
+      <span id="trip-count"></span>
+      <button type="button" id="trip-done-btn">Done shopping</button>
+    </div>
+
+    <div class="picker" id="picker" hidden>
+      <div class="picker-title">Pick this week's list</div>
+      <label class="picker-selectall"><input type="checkbox" id="picker-select-all" checked> Select all</label>
+      <div class="picker-list" id="picker-list"></div>
+      <button type="button" class="picker-start-btn" id="picker-start-btn">Start shopping →</button>
+    </div>
+
     <div class="dial" id="dial" hidden>
       <div class="dial-title">Effort dial</div>
       <div class="dial-row">
@@ -211,6 +284,70 @@
 
   <script>
     const fmt = (n) => '$' + n.toFixed(2);
+    const TRIP_STORAGE_KEY = 'grocery-trip-v1';
+
+    function loadTripSelection() {
+      try {
+        const raw = localStorage.getItem(TRIP_STORAGE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) && parsed.length ? parsed : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function saveTripSelection(names) {
+      try { localStorage.setItem(TRIP_STORAGE_KEY, JSON.stringify(names)); } catch (e) { /* ignore */ }
+    }
+
+    function clearTripSelection() {
+      try { localStorage.removeItem(TRIP_STORAGE_KEY); } catch (e) { /* ignore */ }
+    }
+
+    // Shows the item checklist and resolves once the user taps "Start
+    // shopping", returning the list of chosen item names.
+    function waitForTripStart(allItems) {
+      return new Promise((resolve) => {
+        const picker = document.getElementById('picker');
+        const list = document.getElementById('picker-list');
+        list.innerHTML = allItems.map((item, idx) => (
+          '<label class="picker-item"><input type="checkbox" class="picker-check" data-idx="' + idx + '" checked><span>' + item.name + '</span></label>'
+        )).join('');
+        picker.hidden = false;
+
+        const selectAll = document.getElementById('picker-select-all');
+        selectAll.checked = true;
+        const getChecks = () => Array.from(document.querySelectorAll('.picker-check'));
+
+        selectAll.addEventListener('change', () => {
+          getChecks().forEach((c) => { c.checked = selectAll.checked; });
+        });
+        list.addEventListener('change', (e) => {
+          if (e.target.classList.contains('picker-check') && !e.target.checked) {
+            selectAll.checked = false;
+          }
+        });
+        document.getElementById('picker-start-btn').addEventListener('click', () => {
+          const chosen = getChecks().filter((c) => c.checked).map((c) => allItems[parseInt(c.getAttribute('data-idx'), 10)].name);
+          if (!chosen.length) { alert('Pick at least one item before starting your trip.'); return; }
+          picker.hidden = true;
+          resolve(chosen);
+        });
+      });
+    }
+
+    function showTripBar(count, total) {
+      const bar = document.getElementById('trip-bar');
+      document.getElementById('trip-count').textContent = 'Shopping trip active — ' + count + ' of ' + total + ' items';
+      bar.hidden = false;
+      document.getElementById('trip-done-btn').addEventListener('click', () => {
+        if (confirm('End this shopping trip? Your list will be cleared so you can pick fresh next time.')) {
+          clearTripSelection();
+          location.reload();
+        }
+      });
+    }
 
     function computeStoreTotal(items, store) {
       let total = 0, missing = 0;
@@ -231,12 +368,21 @@
       return base * multiplier * (winter ? 1.5 : 1);
     }
 
+    // How close (in dollars) a store's price needs to be to the cheapest
+    // qualifying option before we'll stick with a store already on the
+    // route, rather than adding a separate stop for a marginal saving.
+    const STICKY_BUFFER = 0.35;
+
     // Superstore is the anchor: an item only moves to another store if the
-    // savings clear that store's tier bar. Otherwise it defaults to Superstore.
+    // savings clear that store's tier bar. Pass 1 picks the globally
+    // cheapest qualifying store per item, in isolation. Pass 2 then checks
+    // whether a store that's already "active" (used by some other item)
+    // is within STICKY_BUFFER of that best price — if so, it keeps the
+    // item at the store you're already visiting instead of adding a stop.
     function assignItems(items, stores, storesCfg, multiplier, winter) {
-      return items.map((item) => {
+      const baseline = items.map((item) => {
         const superstorePrice = item.prices['Superstore'];
-        let best = null;
+        const candidates = [];
         for (const store of stores) {
           if (store === 'Superstore') continue;
           const price = item.prices[store];
@@ -244,18 +390,49 @@
           const tier = tierOf(storesCfg, store);
           const savings = superstorePrice - price;
           const threshold = effectiveThreshold(storesCfg, tier, multiplier, winter);
-          if (savings >= threshold) {
-            if (!best || price < best.price) best = { store, price, tier, savings };
-          }
+          if (savings >= threshold) candidates.push({ store, price, tier, savings });
         }
-        const assignedStore = best ? best.store : 'Superstore';
-        const assignedPrice = best ? best.price : superstorePrice;
+        candidates.sort((a, b) => a.price - b.price);
+        // "Confidence" = gap to the runner-up. A big gap means this item has
+        // a clear favorite; a tiny gap means it's a toss-up that should
+        // defer to wherever else the trip is already going.
+        const confidence = candidates.length > 1 ? (candidates[1].price - candidates[0].price) : Infinity;
+        return { name: item.name, superstorePrice, candidates, confidence };
+      });
+
+      // Decide clear-favorite items first (they anchor a store), then
+      // near-tied items — which can then gravitate to an already-active
+      // store within the buffer instead of scattering to their own pick.
+      const order = baseline
+        .map((_, idx) => idx)
+        .filter((idx) => baseline[idx].candidates.length > 0)
+        .sort((a, c) => baseline[c].confidence - baseline[a].confidence);
+
+      const chosenByIdx = new Array(baseline.length).fill(null);
+      const activeStores = new Set();
+
+      for (const idx of order) {
+        const b = baseline[idx];
+        const cheapest = b.candidates[0];
+        const sticky = b.candidates
+          .filter((c) => activeStores.has(c.store))
+          .filter((c) => c.price - cheapest.price <= STICKY_BUFFER)
+          .sort((a, c) => a.price - c.price)[0];
+        const chosen = sticky || cheapest;
+        chosenByIdx[idx] = chosen;
+        activeStores.add(chosen.store);
+      }
+
+      return baseline.map((b, idx) => {
+        const chosen = chosenByIdx[idx];
+        const assignedStore = chosen ? chosen.store : 'Superstore';
+        const assignedPrice = chosen ? chosen.price : b.superstorePrice;
         return {
-          name: item.name,
-          superstorePrice,
+          name: b.name,
+          superstorePrice: b.superstorePrice,
           assignedStore,
           assignedPrice,
-          savings: superstorePrice - assignedPrice,
+          savings: b.superstorePrice - assignedPrice,
         };
       });
     }
@@ -356,7 +533,7 @@
     }
 
     async function main() {
-      let items, stores, generatedAt, storesCfg;
+      let allItems, stores, generatedAt, storesCfg;
       try {
         const [dataRes, cfgRes] = await Promise.all([
           fetch('./data.json', { cache: 'no-store' }),
@@ -364,7 +541,7 @@
         ]);
         const data = await dataRes.json();
         storesCfg = await cfgRes.json();
-        items = data.items;
+        allItems = data.items;
         stores = data.stores;
         generatedAt = data.generatedAt;
       } catch (e) {
@@ -372,9 +549,27 @@
         return;
       }
 
+      document.getElementById('loading-msg').remove();
+
+      let selectedNames = loadTripSelection();
+      // If the saved list no longer matches any current item (e.g. the
+      // grocery list itself changed since the trip was saved), fall back
+      // to the picker instead of rendering an empty trip.
+      if (selectedNames && !selectedNames.some((n) => allItems.some((i) => i.name === n))) {
+        clearTripSelection();
+        selectedNames = null;
+      }
+      if (!selectedNames) {
+        selectedNames = await waitForTripStart(allItems);
+        saveTripSelection(selectedNames);
+      }
+      showTripBar(selectedNames.length, allItems.length);
+
+      const items = allItems.filter((i) => selectedNames.includes(i.name));
+
       const updated = formatUpdated(generatedAt);
       document.getElementById('lede').textContent =
-        'Ottawa, ON — ' + items.length + ' items, three ways to shop them, prices as of ' + updated + '.';
+        'Ottawa, ON — ' + items.length + ' item' + (items.length === 1 ? '' : 's') + ' on this trip, prices as of ' + updated + '.';
 
       const superstore = computeStoreTotal(items, 'Superstore');
       const candidates = stores.filter((s) => s !== 'Superstore').map((s) => ({ store: s, ...computeStoreTotal(items, s) }));
@@ -387,7 +582,6 @@
       const cheapestAddr = (storesCfg.stores[cheapestSingle.store] || {}).address || '';
 
       // --- static shells (built once) ---
-      document.getElementById('loading-msg').remove();
       document.getElementById('card-superstore').outerHTML = receiptSlot('rc-superstore', -1.1, 0, null);
       document.getElementById('card-cheapest').outerHTML = receiptSlot('rc-cheapest', 0.9, 140, savingsSingle > 0
         ? '<div class="r-stamp">SAVE ' + fmt(savingsSingle) + '<br>' + pctSingle + '% OFF</div>' : null);
@@ -499,6 +693,7 @@
           '<hr class="r-rule">' +
           '<div class="r-meta-row"><span>TXN TYPE</span><span class="v">SPLIT ACROSS ' + mix.storeCount + '</span></div>' +
           '<div class="r-meta-row"><span>ITEMS</span><span class="v">' + items.length + '</span></div>' +
+          '<div class="r-meta-row"><span>CONSOLIDATION</span><span class="v">WITHIN ' + fmt(STICKY_BUFFER) + '</span></div>' +
           '<hr class="r-rule">' +
           stayingHtml +
           groupsHtml +
