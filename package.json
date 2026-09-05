@@ -1,0 +1,17 @@
+{
+  "name": "grocerypulse-screenshot",
+  "version": "1.0.0",
+  "description": "Automates expanding every GroceryPulse category accordion and stitches screenshots into one image.",
+  "main": "capture.js",
+  "scripts": {
+    "start": "node capture.js"
+  },
+  "dependencies": {
+    "chromium": "^3.0.3",
+    "install": "^0.13.0",
+    "npx": "^10.2.2",
+    "playwright": "^1.63.0",
+    "pngjs": "^7.0.0",
+    "then": "^0.0.1"
+  }
+}
