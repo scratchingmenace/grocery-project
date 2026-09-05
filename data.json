@@ -6,7 +6,6 @@
     "Loblaws",
     "Metro",
     "No Frills",
-    "Sobeys",
     "Superstore"
   ],
   "items": [
@@ -19,7 +18,6 @@
         "Loblaws": 6.44,
         "Metro": 8.16,
         "No Frills": 6.44,
-        "Sobeys": 6.49,
         "Superstore": 6.44
       }
     },
@@ -32,7 +30,6 @@
         "Loblaws": 5.99,
         "Metro": 6.49,
         "No Frills": 4.99,
-        "Sobeys": 6.19,
         "Superstore": 5.99
       }
     },
@@ -45,7 +42,6 @@
         "Loblaws": 6.0,
         "Metro": 4.44,
         "No Frills": 5.99,
-        "Sobeys": 6.99,
         "Superstore": 5.97
       }
     },
@@ -58,7 +54,6 @@
         "Loblaws": 3.99,
         "Metro": 2.99,
         "No Frills": 3.0,
-        "Sobeys": 3.99,
         "Superstore": 3.0
       }
     },
@@ -71,7 +66,6 @@
         "Loblaws": 18.8,
         "Metro": 19.82,
         "No Frills": 13.87,
-        "Sobeys": 21.58,
         "Superstore": 18.72
       }
     },
@@ -84,7 +78,6 @@
         "Loblaws": 22.0,
         "Metro": 21.58,
         "No Frills": 18.72,
-        "Sobeys": 19.82,
         "Superstore": 18.72
       }
     },
@@ -97,7 +90,6 @@
         "Loblaws": 11.9,
         "Metro": 13.87,
         "No Frills": 7.47,
-        "Sobeys": 13.49,
         "Superstore": 10.34
       }
     },
@@ -110,7 +102,6 @@
         "Loblaws": 3.99,
         "Metro": 2.69,
         "No Frills": 3.0,
-        "Sobeys": 2.49,
         "Superstore": 3.25
       }
     },
@@ -123,7 +114,6 @@
         "Loblaws": 2.45,
         "Metro": 4.0,
         "No Frills": 2.48,
-        "Sobeys": 2.49,
         "Superstore": 2.45
       }
     },
@@ -136,7 +126,6 @@
         "Loblaws": 3.29,
         "Metro": 6.29,
         "No Frills": 2.29,
-        "Sobeys": 2.67,
         "Superstore": 2.39
       }
     },
@@ -149,7 +138,6 @@
         "Loblaws": 1.96,
         "Metro": 2.18,
         "No Frills": 1.52,
-        "Sobeys": 1.52,
         "Superstore": 1.52
       }
     },
@@ -162,7 +150,6 @@
         "Loblaws": 8.0,
         "Metro": 2.99,
         "No Frills": 7.99,
-        "Sobeys": 6.99,
         "Superstore": 8.0
       }
     },
@@ -175,7 +162,6 @@
         "Loblaws": 5.0,
         "Metro": 5.99,
         "No Frills": 4.99,
-        "Sobeys": 4.97,
         "Superstore": 5.0
       }
     },
@@ -188,7 +174,6 @@
         "Loblaws": 3.31,
         "Metro": 2.8,
         "No Frills": 3.7,
-        "Sobeys": 4.39,
         "Superstore": 3.9
       }
     },
@@ -201,7 +186,6 @@
         "Loblaws": 5.0,
         "Metro": 4.99,
         "No Frills": 3.99,
-        "Sobeys": 5.99,
         "Superstore": 5.0
       }
     },
@@ -214,7 +198,6 @@
         "Loblaws": 2.0,
         "Metro": 6.99,
         "No Frills": 4.99,
-        "Sobeys": 5.99,
         "Superstore": 5.0
       }
     },
@@ -227,7 +210,6 @@
         "Loblaws": 4.0,
         "Metro": 1.99,
         "No Frills": 2.99,
-        "Sobeys": 2.77,
         "Superstore": 3.0
       }
     },
@@ -240,7 +222,6 @@
         "Loblaws": 3.0,
         "Metro": 1.99,
         "No Frills": 2.99,
-        "Sobeys": 2.77,
         "Superstore": 3.0
       }
     },
@@ -253,7 +234,6 @@
         "Loblaws": 2.5,
         "Metro": 2.99,
         "No Frills": 1.99,
-        "Sobeys": 8.8,
         "Superstore": 2.5
       }
     },
@@ -266,7 +246,6 @@
         "Loblaws": 2.2,
         "Metro": 7.69,
         "No Frills": 2.18,
-        "Sobeys": 4.39,
         "Superstore": 4.41
       }
     },
@@ -279,7 +258,6 @@
         "Loblaws": 3.0,
         "Metro": 1.99,
         "No Frills": 2.49,
-        "Sobeys": 1.99,
         "Superstore": 2.0
       }
     }
