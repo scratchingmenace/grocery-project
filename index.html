@@ -304,7 +304,9 @@
     }
 
     function compareRowHtml(row) {
-      const priceHtml = '<span class="price ' + row.cls + ' num">' + fmt(row.altPrice) + '</span>';
+      const sign = row.savings > 0 ? '+' : (row.savings < 0 ? '\u2212' : '');
+      const diffText = sign + '$' + Math.abs(row.savings).toFixed(2);
+      const priceHtml = '<span class="price ' + row.cls + ' num">' + diffText + '</span>';
       return (
         '<div class="r-item"><span class="name">' + row.name + '</span><span class="leader"></span>' +
         priceHtml + '<span class="tag ' + row.tagCls + '">' + row.tagText + '</span></div>'
@@ -445,7 +447,7 @@
           if (savings >= threshForCheapest) { cls = 'justify'; tagCls = 'tag-justify'; tagText = 'worth the trip'; }
           else if (savings > 0) { cls = 'bonus'; tagCls = 'tag-bonus'; tagText = 'nice bonus'; }
           else { cls = 'none'; tagCls = 'tag-none'; tagText = 'stay home'; }
-          return compareRowHtml({ name: item.name, altPrice, cls, tagCls, tagText });
+          return compareRowHtml({ name: item.name, savings, cls, tagCls, tagText });
         }).join('');
 
         document.getElementById('rc-compare').innerHTML = (
