@@ -1,16 +1,63 @@
 {
   "tierDefaults": {
-    "cheap":     { "label": "Nearby",      "threshold": 1.00, "typicalMinutes": 45 },
-    "medium":    { "label": "Short trip",  "threshold": 2.00, "typicalMinutes": 55 },
-    "expensive": { "label": "Real detour", "threshold": 3.50, "typicalMinutes": 75 }
+    "cheap": {
+      "label": "Nearby",
+      "threshold": 1.0,
+      "typicalMinutes": 45
+    },
+    "medium": {
+      "label": "Short trip",
+      "threshold": 2.0,
+      "typicalMinutes": 55
+    },
+    "expensive": {
+      "label": "Real detour",
+      "threshold": 3.5,
+      "typicalMinutes": 75
+    }
   },
   "stores": {
-    "Superstore":  { "address": "190 Richmond Rd",        "distanceKm": 0.2, "tier": "home" },
-    "Food Basics": { "address": "667 Kirkwood Ave",       "distanceKm": 1.0, "tier": "cheap" },
-    "Metro":       { "address": "345 Carleton Ave",       "distanceKm": 1.4, "tier": "cheap" },
-    "Giant Tiger": { "address": "1085 Wellington St W",   "distanceKm": 2.2, "tier": "cheap" },
-    "Loblaws":     { "address": "2085 Carling Ave",       "distanceKm": 3.0, "tier": "medium" },
-    "FreshCo":     { "address": "1595 Merivale Rd",       "distanceKm": 4.5, "tier": "expensive" },
-    "No Frills":   { "address": "2681 Alta Vista Dr",     "distanceKm": 6.0, "tier": "expensive" }
+    "Superstore": {
+      "address": "190 Richmond Rd",
+      "distanceKm": 0.2,
+      "tier": "home",
+      "halalMeat": true
+    },
+    "Food Basics": {
+      "address": "667 Kirkwood Ave",
+      "distanceKm": 1.0,
+      "tier": "cheap",
+      "halalMeat": true
+    },
+    "Metro": {
+      "address": "345 Carleton Ave",
+      "distanceKm": 1.4,
+      "tier": "cheap",
+      "halalMeat": true
+    },
+    "Giant Tiger": {
+      "address": "1085 Wellington St W",
+      "distanceKm": 2.2,
+      "tier": "cheap",
+      "halalMeat": false
+    },
+    "Loblaws": {
+      "address": "2085 Carling Ave",
+      "distanceKm": 3.0,
+      "tier": "medium",
+      "halalMeat": true
+    },
+    "FreshCo": {
+      "address": "1595 Merivale Rd",
+      "distanceKm": 4.5,
+      "tier": "expensive",
+      "halalMeat": true
+    },
+    "No Frills": {
+      "address": "2681 Alta Vista Dr",
+      "distanceKm": 6.0,
+      "tier": "expensive",
+      "halalMeat": true
+    }
   }
 }

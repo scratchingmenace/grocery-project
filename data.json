@@ -67,19 +67,8 @@
         "Metro": 19.82,
         "No Frills": 13.87,
         "Superstore": 18.72
-      }
-    },
-    {
-      "name": "Ground Beef, Lean, per kg",
-      "prices": {
-        "Food Basics": 20.92,
-        "FreshCo": 10.0,
-        "Giant Tiger": 10.87,
-        "Loblaws": 22.0,
-        "Metro": 21.58,
-        "No Frills": 18.72,
-        "Superstore": 18.72
-      }
+      },
+      "requiresHalal": true
     },
     {
       "name": "Chicken Thighs, Bone-In, per kg",
@@ -91,7 +80,8 @@
         "Metro": 13.87,
         "No Frills": 7.47,
         "Superstore": 10.34
-      }
+      },
+      "requiresHalal": true
     },
     {
       "name": "White Bread, 675g",

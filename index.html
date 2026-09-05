@@ -349,11 +349,17 @@
       });
     }
 
-    function computeStoreTotal(items, store) {
+    function isEligible(item, store, storesCfg) {
+      if (!item.requiresHalal) return true;
+      const s = storesCfg.stores[store];
+      return !!(s && s.halalMeat);
+    }
+
+    function computeStoreTotal(items, store, storesCfg) {
       let total = 0, missing = 0;
       for (const item of items) {
         const p = item.prices[store];
-        if (p == null) missing += 1; else total += p;
+        if (p == null || !isEligible(item, store, storesCfg)) missing += 1; else total += p;
       }
       return { total, missing };
     }
@@ -385,6 +391,7 @@
         const candidates = [];
         for (const store of stores) {
           if (store === 'Superstore') continue;
+          if (!isEligible(item, store, storesCfg)) continue;
           const price = item.prices[store];
           if (price == null) continue;
           const tier = tierOf(storesCfg, store);
@@ -571,8 +578,8 @@
       document.getElementById('lede').textContent =
         'Ottawa, ON — ' + items.length + ' item' + (items.length === 1 ? '' : 's') + ' on this trip, prices as of ' + updated + '.';
 
-      const superstore = computeStoreTotal(items, 'Superstore');
-      const candidates = stores.filter((s) => s !== 'Superstore').map((s) => ({ store: s, ...computeStoreTotal(items, s) }));
+      const superstore = computeStoreTotal(items, 'Superstore', storesCfg);
+      const candidates = stores.filter((s) => s !== 'Superstore').map((s) => ({ store: s, ...computeStoreTotal(items, s, storesCfg) }));
       const complete = candidates.filter((c) => c.missing === 0).sort((a, b) => a.total - b.total);
       const cheapestSingle = complete[0];
       const savingsSingle = superstore.total - cheapestSingle.total;
