@@ -5,137 +5,151 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Where to buy your list — Ottawa grocery savings</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Libre+Franklin:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #1B2A20;
-    --card-bg: #21311F;
-    --border: #33452F;
-    --dashed: #2C3B29;
-    --text-hi: #F7F4EB;
-    --text-body: #DDE4D6;
-    --text-dim: #B7C3AF;
-    --text-mute: #92A38C;
-    --text-faint: #71826B;
-    --text-vfaint: #566153;
-    --gold: #E3B24C;
-    --gold-dim: #C6BB86;
-    --stamp: #C1573B;
-    --focus: #E3B24C;
+    --counter-a: #2B2016;
+    --counter-b: #201710;
+    --paper: #F6F1E2;
+    --paper-shade: #EAE2C9;
+    --ink: #2B2620;
+    --ink-soft: #6B6252;
+    --ink-faint: #A89F8C;
+    --stamp: #B23B2E;
+    --focus: #D9A441;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
-    font-family: 'Libre Franklin', sans-serif;
-    background: var(--bg);
-    background-image: radial-gradient(ellipse 900px 500px at 50% -10%, rgba(227,178,76,0.06), transparent);
-    color: var(--text-hi);
+    font-family: 'Space Mono', monospace;
+    background:
+      radial-gradient(ellipse 700px 380px at 50% 0%, rgba(255,255,255,0.05), transparent 60%),
+      repeating-linear-gradient(115deg, var(--counter-a) 0px, var(--counter-a) 2px, var(--counter-b) 2px, var(--counter-b) 4px);
+    color: var(--paper);
     min-height: 100vh;
-    padding: 40px 16px 64px;
+    padding: 44px 16px 80px;
     -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 540px; margin: 0 auto; }
-  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .wrap { max-width: 400px; margin: 0 auto; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 
-  .masthead { margin-bottom: 30px; }
-  .meta-row { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-mute); margin-bottom: 10px; letter-spacing: 0.2px; }
-  .meta-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+  .masthead { margin: 0 4px 34px; }
   h1 {
-    font-family: 'Fraunces', serif;
-    font-weight: 600;
-    font-size: 32px;
-    line-height: 1.14;
+    font-weight: 700;
+    font-size: 27px;
+    line-height: 1.22;
+    letter-spacing: -0.3px;
+    text-transform: uppercase;
     margin: 0;
-    color: var(--text-hi);
-    letter-spacing: -0.2px;
+    color: var(--paper);
+    text-shadow: 1.5px 0 0 rgba(178,59,46,0.4);
   }
-  .lede { color: var(--text-dim); font-size: 15px; margin-top: 10px; line-height: 1.55; max-width: 46ch; }
-  .num { font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+  .lede { color: #C9C0AC; font-size: 13px; margin-top: 12px; line-height: 1.65; max-width: 40ch; }
+  .num { font-variant-numeric: tabular-nums; }
+  .loading { color: #C9C0AC; font-size: 13px; padding: 40px 4px; text-align: center; }
 
-  .sheet {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 4px 20px;
+  /* ---- receipt ---- */
+  .receipt-slot { position: relative; margin: 0 0 44px; }
+  .receipt {
+    position: relative;
+    background: var(--paper);
+    color: var(--ink);
+    padding: 26px 22px 20px;
+    box-shadow: 0 18px 30px -12px rgba(0,0,0,0.55), 0 3px 0 rgba(0,0,0,0.15);
+    opacity: 0;
+    transform: translateY(-26px);
+  }
+  .receipt.torn::before {
+    content: '';
+    position: absolute;
+    top: -9px; left: 0; right: 0; height: 18px;
+    background: var(--paper);
+    clip-path: polygon(0.0% 0px, 3.03% 9px, 6.06% 0px, 9.09% 9px, 12.12% 0px, 15.15% 9px, 18.18% 0px, 21.21% 9px, 24.24% 0px, 27.27% 9px, 30.3% 0px, 33.33% 9px, 36.36% 0px, 39.39% 9px, 42.42% 0px, 45.45% 9px, 48.48% 0px, 51.52% 9px, 54.55% 0px, 57.58% 9px, 60.61% 0px, 63.64% 9px, 66.67% 0px, 69.7% 9px, 72.73% 0px, 75.76% 9px, 78.79% 0px, 81.82% 9px, 84.85% 0px, 87.88% 9px, 90.91% 0px, 93.94% 9px, 96.97% 0px, 100% 9px, 100% 100%, 0% 100%);
+  }
+  .receipt.tail::after {
+    content: '';
+    position: absolute;
+    bottom: -9px; left: 0; right: 0; height: 18px;
+    background: var(--paper);
+    clip-path: polygon(0.0% 9px, 3.03% 0px, 6.06% 9px, 9.09% 0px, 12.12% 9px, 15.15% 0px, 18.18% 9px, 21.21% 0px, 24.24% 9px, 27.27% 0px, 30.3% 9px, 33.33% 0px, 36.36% 9px, 39.39% 0px, 42.42% 9px, 45.45% 0px, 48.48% 9px, 51.52% 0px, 54.55% 9px, 57.58% 0px, 60.61% 9px, 63.64% 0px, 66.67% 9px, 69.7% 0px, 72.73% 9px, 75.76% 0px, 78.79% 9px, 81.82% 0px, 84.85% 9px, 87.88% 0px, 90.91% 9px, 93.94% 0px, 96.97% 9px, 100% 0px, 100% 100%, 0% 100%);
   }
 
-  .card { border-top: 1px solid var(--border); padding: 18px 0; }
-  .card:first-child { border-top: none; }
-  .card-head {
-    width: 100%; background: none; border: none; padding: 4px 0; margin: -4px 0; cursor: pointer;
-    text-align: left; color: inherit; display: flex; align-items: center;
-    justify-content: space-between; gap: 12px; font: inherit; border-radius: 8px;
+  .r-header { text-align: center; margin-bottom: 14px; }
+  .r-store { font-size: 19px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+  .r-loc { font-size: 11px; color: var(--ink-soft); margin-top: 3px; letter-spacing: 0.3px; }
+
+  .r-rule { border: none; border-top: 1px dashed var(--ink-faint); margin: 12px 0; }
+  .r-rule.heavy { border-top-style: solid; border-top-width: 1px; border-color: var(--ink); opacity: 0.75; }
+
+  .r-meta-row { display: flex; justify-content: space-between; font-size: 11.5px; padding: 2px 0; color: var(--ink-soft); }
+  .r-meta-row .v { color: var(--ink); font-weight: 700; }
+
+  .r-group-label { text-align: center; font-size: 11px; color: var(--ink-soft); margin: 12px 0 8px; letter-spacing: 0.4px; }
+
+  .r-item { display: flex; align-items: baseline; gap: 6px; font-size: 13px; padding: 4px 0; }
+  .r-item .name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .r-item .leader { flex: 1; border-bottom: 1px dotted var(--ink-faint); height: 0; margin-bottom: 4px; min-width: 8px; }
+  .r-item .price { white-space: nowrap; }
+  .r-item .price.na { color: var(--ink-faint); font-style: italic; }
+
+  .r-subtotal { display: flex; justify-content: space-between; font-size: 12.5px; padding: 6px 0 2px; color: var(--ink-soft); }
+  .r-subtotal .v { color: var(--ink); }
+
+  .r-total { display: flex; justify-content: space-between; align-items: baseline; font-size: 17px; font-weight: 700; padding: 4px 0 2px; }
+
+  .r-stamp {
+    position: absolute;
+    top: 20px; right: 12px;
+    border: 2.5px solid var(--stamp);
+    color: var(--stamp);
+    padding: 5px 9px 6px;
+    font-weight: 700;
+    font-size: 11.5px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    transform: rotate(-9deg);
+    mix-blend-mode: multiply;
+    opacity: 0.88;
+    text-align: center;
+    line-height: 1.3;
+    pointer-events: none;
   }
-  .card-head-left { min-width: 0; }
-  .eyebrow { font-size: 11px; letter-spacing: 0.5px; color: var(--text-faint); margin-bottom: 4px; font-weight: 600; }
-  .card-title { font-family: 'Fraunces', serif; font-weight: 600; font-size: 21px; color: var(--text-hi); }
-  .card-sub { font-size: 13px; color: var(--text-mute); margin-top: 3px; }
-  .card-head-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-  .total-block { text-align: right; }
-  .total-amt { font-size: 20px; font-weight: 600; color: var(--text-hi); }
-  .savings-tag {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-size: 11px; color: #2B1B14; background: var(--stamp);
-    margin-top: 5px; font-weight: 600; letter-spacing: 0.2px;
-    padding: 2px 7px 3px; border-radius: 4px; transform: rotate(-2deg);
+
+  .r-barcode {
+    height: 34px;
+    margin: 16px 2px 6px;
+    background-repeat: repeat-x;
+    background-size: auto 100%;
   }
-  .chev { transition: transform 220ms ease; flex-shrink: 0; opacity: 0.7; }
-  .chev.open { transform: rotate(180deg); }
 
-  .acc-body { overflow: hidden; display: grid; grid-template-rows: 0fr; transition: grid-template-rows 300ms ease; margin-top: 0; }
-  .acc-body.open { grid-template-rows: 1fr; margin-top: 16px; }
-  .acc-body > div { min-height: 0; overflow: hidden; }
-
-  .item-row {
-    display: flex; justify-content: space-between; gap: 12px; padding: 7px 0;
-    border-bottom: 1px dashed var(--dashed); font-size: 14px;
-  }
-  .item-row:last-child { border-bottom: none; }
-  .item-row .name { color: var(--text-body); }
-  .item-row.dim .name { color: var(--text-dim); }
-  .item-row .price { color: var(--gold); flex-shrink: 0; }
-  .item-row.dim .price { color: var(--gold-dim); }
-  .item-row .price.na { color: var(--text-vfaint); }
-
-  .group-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px; }
-  .group-head-left { display: flex; align-items: center; gap: 6px; }
-  .group-store { font-weight: 600; font-size: 15px; color: var(--text-hi); }
-  .group-count { font-size: 12.5px; color: var(--text-faint); }
-  .group-subtotal { font-size: 14.5px; color: var(--gold-dim); }
-  .group { margin-bottom: 20px; }
-  .group:last-child { margin-bottom: 4px; }
-
-  .footnote { font-size: 12.5px; color: var(--text-faint); margin-top: 22px; line-height: 1.55; padding: 0 4px; }
-  .loading { color: var(--text-mute); font-size: 14px; padding: 48px 0; text-align: center; }
+  .r-footer { text-align: center; font-size: 10.5px; color: var(--ink-soft); letter-spacing: 0.3px; }
+  .r-note { font-style: italic; font-size: 11.5px; color: var(--ink-soft); text-align: center; margin-top: 14px; line-height: 1.55; }
 
   @media (prefers-reduced-motion: reduce) {
-    .acc-body, .chev { transition: none !important; }
+    .receipt { transition: none !important; }
   }
 
-  @media (max-width: 400px) {
-    h1 { font-size: 27px; }
-    .card-title { font-size: 19px; }
-    .total-amt { font-size: 18px; }
+  @media (max-width: 380px) {
+    h1 { font-size: 23px; }
+    .r-store { font-size: 17px; }
+    .r-total { font-size: 15.5px; }
+    .receipt { padding: 22px 16px 18px; }
   }
 </style>
 </head>
 <body>
   <div class="wrap">
     <div class="masthead">
-      <div class="meta-row" id="meta-line"><span class="meta-dot"></span>Loading…</div>
       <h1>Where to buy your list</h1>
-      <p class="lede">Three ways to shop the same items — one stop at Superstore, one stop at the cheapest complete store, or splitting the list across banners for the lowest possible total.</p>
+      <p class="lede" id="lede">Loading your receipts…</p>
     </div>
-    <div class="sheet" id="cards"><div class="loading">Loading prices…</div></div>
+    <div id="cards"><div class="loading">Ringing up prices…</div></div>
   </div>
 
   <script>
-    const PIN_SVG = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E3B24C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>';
-    const CHEV_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#92A38C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>';
-
     const fmt = (n) => '$' + n.toFixed(2);
 
-    function computeStoreTotal(items, stores, store) {
+    function computeStoreTotal(items, store) {
       let total = 0, missing = 0;
       for (const item of items) {
         const p = item.prices[store];
@@ -167,43 +181,55 @@
       return { groups, total, storeCount: groups.length };
     }
 
-    function itemRowHtml(name, price, dim) {
+    function itemRowHtml(name, price) {
       const priceHtml = price == null
-        ? '<span class="price na num">not carried</span>'
+        ? '<span class="price na num">n/a</span>'
         : '<span class="price num">' + fmt(price) + '</span>';
-      return '<div class="item-row' + (dim ? ' dim' : '') + '"><span class="name">' + name + '</span>' + priceHtml + '</div>';
+      return '<div class="r-item"><span class="name">' + name + '</span><span class="leader"></span>' + priceHtml + '</div>';
     }
 
-    function cardHtml(id, eyebrow, title, subtitle, total, savings, savingsPct, bodyHtml, expanded) {
-      const savingsHtml = (savings != null && savings > 0)
-        ? '<div class="savings-tag">save ' + fmt(savings) + ' · ' + savingsPct + '%</div>'
+    function barcodeSvg(seed) {
+      // deterministic pseudo-random bar widths from a seed string, purely decorative
+      let s = 0;
+      for (let i = 0; i < seed.length; i++) s = (s * 31 + seed.charCodeAt(i)) >>> 0;
+      const rand = () => { s = (s * 1103515245 + 12345) >>> 0; return (s / 4294967296); };
+      let x = 0, bars = '';
+      const w = 260, h = 34;
+      while (x < w) {
+        const bw = 1 + Math.floor(rand() * 4);
+        if (rand() > 0.42) bars += '<rect x="' + x + '" y="0" width="' + bw + '" height="' + h + '" fill="#2B2620"/>';
+        x += bw + 1;
+      }
+      const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none">' + bars + '</svg>';
+      return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
+    }
+
+    function receiptShell(innerHtml, opts) {
+      const rot = opts.rot || 0;
+      const stampHtml = opts.savings != null && opts.savings > 0
+        ? '<div class="r-stamp">SAVE ' + fmt(opts.savings) + '<br>' + opts.pct + '% OFF</div>'
         : '';
       return (
-        '<div class="card" data-id="' + id + '">' +
-          '<button class="card-head" data-toggle="' + id + '" aria-expanded="' + (expanded ? 'true' : 'false') + '">' +
-            '<div class="card-head-left">' +
-              '<div class="eyebrow">' + eyebrow + '</div>' +
-              '<div class="card-title">' + title + '</div>' +
-              '<div class="card-sub">' + subtitle + '</div>' +
-            '</div>' +
-            '<div class="card-head-right">' +
-              '<div class="total-block">' +
-                '<div class="total-amt num">' + fmt(total) + '</div>' +
-                savingsHtml +
-              '</div>' +
-              '<span class="chev' + (expanded ? ' open' : '') + '" data-chev="' + id + '">' + CHEV_SVG + '</span>' +
-            '</div>' +
-          '</button>' +
-          '<div class="acc-body' + (expanded ? ' open' : '') + '" data-body="' + id + '"><div>' + bodyHtml + '</div></div>' +
+        '<div class="receipt-slot" data-delay="' + opts.delay + '">' +
+          '<div class="receipt torn tail" data-rot="' + rot + '" style="transform: translateY(-26px) rotate(' + rot + 'deg)">' +
+            innerHtml +
+            stampHtml +
+          '</div>' +
         '</div>'
       );
     }
 
     function formatUpdated(iso) {
-      if (!iso) return 'Prices from GroceryPulse';
+      if (!iso) return '—';
       const d = new Date(iso);
       const opts = { weekday: 'short', month: 'short', day: 'numeric' };
-      return 'Updated ' + d.toLocaleDateString('en-CA', opts);
+      return d.toLocaleDateString('en-CA', opts);
+    }
+
+    function receiptNumber(seed) {
+      let s = 0;
+      for (let i = 0; i < seed.length; i++) s = (s * 17 + seed.charCodeAt(i)) % 90000;
+      return String(10000 + s).slice(0, 5);
     }
 
     async function main() {
@@ -219,11 +245,12 @@
         return;
       }
 
-      document.getElementById('meta-line').innerHTML =
-        '<span class="meta-dot"></span>Ottawa · ' + items.length + ' items · ' + formatUpdated(generatedAt);
+      const updated = formatUpdated(generatedAt);
+      document.getElementById('lede').textContent =
+        'Ottawa, ON — ' + items.length + ' items, three ways to shop them, prices as of ' + updated + '.';
 
-      const superstore = computeStoreTotal(items, stores, 'Superstore');
-      const candidates = stores.filter((s) => s !== 'Superstore').map((s) => ({ store: s, ...computeStoreTotal(items, stores, s) }));
+      const superstore = computeStoreTotal(items, 'Superstore');
+      const candidates = stores.filter((s) => s !== 'Superstore').map((s) => ({ store: s, ...computeStoreTotal(items, s) }));
       const complete = candidates.filter((c) => c.missing === 0).sort((a, b) => a.total - b.total);
       const cheapestSingle = complete[0];
       const mix = computeMixAndMatch(items, stores);
@@ -233,53 +260,79 @@
       const pctSingle = Math.round((savingsSingle / superstore.total) * 100);
       const pctMix = Math.round((savingsMix / superstore.total) * 100);
 
-      const superstoreBody = items.map((i) => itemRowHtml(i.name, i.prices['Superstore'])).join('');
-      const cheapestBody = items.map((i) => itemRowHtml(i.name, i.prices[cheapestSingle.store])).join('');
+      // --- Receipt 1: Superstore, one stop ---
+      const rc1 = (
+        '<div class="r-header"><div class="r-store">Superstore</div><div class="r-loc">Ottawa, ON</div></div>' +
+        '<hr class="r-rule">' +
+        '<div class="r-meta-row"><span>TXN TYPE</span><span class="v">ONE-STOP SHOP</span></div>' +
+        '<div class="r-meta-row"><span>ITEMS</span><span class="v">' + items.length + '</span></div>' +
+        '<hr class="r-rule">' +
+        items.map((i) => itemRowHtml(i.name, i.prices['Superstore'])).join('') +
+        '<hr class="r-rule heavy">' +
+        '<div class="r-total"><span>TOTAL</span><span class="num">' + fmt(superstore.total) + '</span></div>' +
+        '<div class="r-barcode" style="background-image:' + barcodeSvg('superstore') + '"></div>' +
+        '<div class="r-footer">NO. ' + receiptNumber('superstore') + ' &nbsp;·&nbsp; ' + updated + '</div>'
+      );
 
-      const mixBody = mix.groups.map((g) => {
-        const rowsHtml = g.rows.map((r) => itemRowHtml(r.name, r.price, true)).join('');
-        return (
-          '<div class="group">' +
-            '<div class="group-head">' +
-              '<div class="group-head-left">' + PIN_SVG +
-                '<span class="group-store">' + g.store + '</span>' +
-                '<span class="group-count">· ' + g.rows.length + ' item' + (g.rows.length > 1 ? 's' : '') + '</span>' +
-              '</div>' +
-              '<span class="group-subtotal num">' + fmt(g.subtotal) + '</span>' +
-            '</div>' +
-            rowsHtml +
-          '</div>'
-        );
-      }).join('');
+      // --- Receipt 2: cheapest single store ---
+      const rc2 = (
+        '<div class="r-header"><div class="r-store">' + cheapestSingle.store + '</div><div class="r-loc">Ottawa, ON</div></div>' +
+        '<hr class="r-rule">' +
+        '<div class="r-meta-row"><span>TXN TYPE</span><span class="v">ONE-STOP SHOP</span></div>' +
+        '<div class="r-meta-row"><span>ITEMS</span><span class="v">' + items.length + '</span></div>' +
+        '<hr class="r-rule">' +
+        items.map((i) => itemRowHtml(i.name, i.prices[cheapestSingle.store])).join('') +
+        '<hr class="r-rule heavy">' +
+        '<div class="r-total"><span>TOTAL</span><span class="num">' + fmt(cheapestSingle.total) + '</span></div>' +
+        '<div class="r-barcode" style="background-image:' + barcodeSvg(cheapestSingle.store) + '"></div>' +
+        '<div class="r-footer">NO. ' + receiptNumber(cheapestSingle.store) + ' &nbsp;·&nbsp; ' + updated + '</div>'
+      );
+
+      // --- Receipt 3: mix and match, grouped by store ---
+      const groupsHtml = mix.groups.map((g) => (
+        '<div class="r-group-label">— AT ' + g.store.toUpperCase() + ' —</div>' +
+        g.rows.map((r) => itemRowHtml(r.name, r.price)).join('') +
+        '<div class="r-subtotal"><span>SUBTOTAL</span><span class="v num">' + fmt(g.subtotal) + '</span></div>'
+      )).join('');
+      const rc3 = (
+        '<div class="r-header"><div class="r-store">Mix &amp; Match</div><div class="r-loc">Cheapest item, any store</div></div>' +
+        '<hr class="r-rule">' +
+        '<div class="r-meta-row"><span>TXN TYPE</span><span class="v">SPLIT ACROSS ' + mix.storeCount + '</span></div>' +
+        '<div class="r-meta-row"><span>ITEMS</span><span class="v">' + items.length + '</span></div>' +
+        '<hr class="r-rule">' +
+        groupsHtml +
+        '<hr class="r-rule heavy">' +
+        '<div class="r-total"><span>TOTAL</span><span class="num">' + fmt(mix.total) + '</span></div>' +
+        '<div class="r-barcode" style="background-image:' + barcodeSvg('mix') + '"></div>' +
+        '<div class="r-footer">NO. ' + receiptNumber('mix') + ' &nbsp;·&nbsp; ' + updated + '</div>' +
+        '<div class="r-note">That is ' + mix.storeCount + ' separate stops for ' + fmt(savingsMix) + ' more in savings — worth weighing against the extra driving.</div>'
+      );
 
       const html =
-        cardHtml('superstore', 'ONE STOP', 'Superstore', 'All ' + items.length + ' items', superstore.total, null, null, superstoreBody, false) +
-        cardHtml('cheapest', 'ONE STOP · CHEAPEST', cheapestSingle.store, 'All ' + items.length + ' items, lowest single-store total', cheapestSingle.total, savingsSingle, pctSingle, cheapestBody, false) +
-        cardHtml('mix', 'MIX & MATCH · ' + mix.storeCount + ' STOPS', 'Cheapest per item', 'Split across ' + mix.storeCount + ' stores', mix.total, savingsMix, pctMix, mixBody, true);
+        receiptShell(rc1, { rot: -1.1, delay: 0 }) +
+        receiptShell(rc2, { rot: 0.9, delay: 140, savings: savingsSingle, pct: pctSingle }) +
+        receiptShell(rc3, { rot: -0.6, delay: 280, savings: savingsMix, pct: pctMix });
 
       document.getElementById('cards').innerHTML = html;
 
-      document.getElementById('cards').insertAdjacentHTML('afterend',
-        '<p class="footnote">Mix &amp; match means ' + mix.storeCount + ' separate stops. Weigh the ' + fmt(savingsMix) + ' saved against the extra driving before committing to the full split.</p>');
-
-      document.querySelectorAll('[data-toggle]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-toggle');
-          const body = document.querySelector('[data-body="' + id + '"]');
-          const isOpen = body.classList.contains('open');
-          toggle(id, !isOpen);
-        });
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document.querySelectorAll('.receipt').forEach((el) => {
+        const slot = el.closest('.receipt-slot');
+        const delay = parseInt(slot.getAttribute('data-delay') || '0', 10);
+        const rot = el.getAttribute('data-rot') || '0';
+        if (prefersReduced) {
+          el.style.opacity = '1';
+          el.style.transform = 'rotate(' + rot + 'deg)';
+        } else {
+          requestAnimationFrame(() => {
+            setTimeout(() => {
+              el.style.transition = 'opacity 480ms ease, transform 480ms cubic-bezier(.2,.8,.2,1)';
+              el.style.opacity = '1';
+              el.style.transform = 'rotate(' + rot + 'deg)';
+            }, delay);
+          });
+        }
       });
-    }
-
-    function toggle(id, open) {
-      const body = document.querySelector('[data-body="' + id + '"]');
-      const chev = document.querySelector('[data-chev="' + id + '"]');
-      const btn = document.querySelector('[data-toggle="' + id + '"]');
-      if (!body) return;
-      body.classList.toggle('open', open);
-      if (chev) chev.classList.toggle('open', open);
-      if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     }
 
     main();
