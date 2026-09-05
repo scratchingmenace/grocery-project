@@ -1,0 +1,46 @@
+name: Update grocery prices
+
+on:
+  schedule:
+    # Runs at 21:00 UTC, which is 5:00pm Eastern Daylight Time (most of the
+    # year) or 4:00pm Eastern Standard Time in winter. GitHub Actions cron
+    # only runs in UTC and can't auto-adjust for daylight saving, but a few
+    # hours of buffer after GroceryPulse's Thursday update means the exact
+    # hour doesn't need to be precise.
+    - cron: '0 21 * * 4'
+  workflow_dispatch: {} # lets you trigger it manually from the Actions tab too
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: grocerypulse-screenshot
+        run: npm install
+
+      - name: Install Chromium for Playwright
+        working-directory: grocerypulse-screenshot
+        run: npx playwright install --with-deps chromium
+
+      - name: Run scraper
+        working-directory: grocerypulse-screenshot
+        run: node scrape.js
+
+      - name: Commit updated data.json if it changed
+        run: |
+          git config user.name "grocery-price-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add grocery-site/data.json
+          git diff --staged --quiet || git commit -m "chore: weekly grocery price update"
+          git push
