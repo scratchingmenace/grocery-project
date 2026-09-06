@@ -47,6 +47,8 @@
     text-shadow: 1.5px 0 0 rgba(178,59,46,0.4);
   }
   .lede { color: #C9C0AC; font-size: 13px; margin-top: 12px; line-height: 1.65; max-width: 40ch; }
+  .back-link { display: inline-block; margin-top: 12px; font-size: 11.5px; color: var(--focus); text-decoration: none; border-bottom: 1px dotted var(--focus); }
+  .back-link:hover { opacity: 0.85; }
   .num { font-variant-numeric: tabular-nums; }
   .loading { color: #C9C0AC; font-size: 13px; padding: 40px 4px; text-align: center; }
 
@@ -98,6 +100,90 @@
     white-space: nowrap;
   }
   .trip-bar button:hover { filter: brightness(1.08); }
+
+  /* ---- price verification panel ---- */
+  .verify-toggle {
+    display: block;
+    width: 100%;
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: #D8D0BE;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 4px;
+    padding: 9px 12px;
+    margin: 0 4px 10px;
+    cursor: pointer;
+    text-align: left;
+  }
+  .verify-toggle:hover { background: rgba(255,255,255,0.08); }
+  .verify-panel {
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 4px;
+    padding: 6px 14px 10px;
+    margin: 0 4px 28px;
+  }
+  .verify-item { padding: 12px 0; border-bottom: 1px dashed rgba(255,255,255,0.12); }
+  .verify-item:last-child { border-bottom: none; }
+  .verify-item-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+  .verify-item-name { font-size: 12px; font-weight: 700; color: #EFE6D2; }
+  .verify-checkall-btn {
+    font-family: inherit;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    color: var(--counter-a);
+    background: var(--focus);
+    border: none;
+    border-radius: 3px;
+    padding: 5px 8px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .verify-checkall-btn:hover { filter: brightness(1.08); }
+  .verify-store-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: #D8D0BE;
+    padding: 5px 0;
+  }
+  .verify-store-check { width: 14px; height: 14px; accent-color: var(--focus); flex-shrink: 0; }
+  .verify-store-name { min-width: 84px; color: #C9C0AC; }
+  .verify-badge { font-size: 9px; color: var(--focus); text-transform: uppercase; letter-spacing: 0.3px; }
+  .verify-check-link { color: var(--focus); text-decoration: none; border-bottom: 1px dotted var(--focus); font-size: 10.5px; }
+  .verify-check-link:hover { opacity: 0.85; }
+  .verify-input {
+    width: 68px;
+    font-family: inherit;
+    font-size: 11px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 3px;
+    color: #F6F1E2;
+    padding: 4px 6px;
+  }
+  .verify-save-btn, .verify-clear-btn {
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 8px;
+    cursor: pointer;
+  }
+  .verify-save-btn { color: var(--counter-a); background: var(--focus); }
+  .verify-clear-btn { color: #D8D0BE; background: rgba(255,255,255,0.1); }
+  .verify-save-btn:hover, .verify-clear-btn:hover { filter: brightness(1.08); }
+  .verify-note { font-size: 10px; color: var(--ink-faint); color: #A89F8C; margin-left: auto; }
 
   /* ---- item picker ---- */
   .picker {
@@ -253,6 +339,9 @@
       <button type="button" id="trip-done-btn">Done shopping</button>
     </div>
 
+    <button type="button" class="verify-toggle" id="verify-toggle" hidden>Verify prices ▾</button>
+    <div class="verify-panel" id="verify-panel" hidden></div>
+
     <div class="picker" id="picker" hidden>
       <div class="picker-title">Pick this week's list</div>
       <label class="picker-selectall"><input type="checkbox" id="picker-select-all" checked> Select all</label>
@@ -347,6 +436,119 @@
           location.reload();
         }
       });
+    }
+
+    // --- manual price overrides (verified against Flipp/in-store) ---
+    const OVERRIDES_STORAGE_KEY = 'grocery-price-overrides-v1';
+
+    function loadOverrides() {
+      try {
+        const raw = localStorage.getItem(OVERRIDES_STORAGE_KEY);
+        return raw ? JSON.parse(raw) : {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveOverrides(overrides) {
+      try { localStorage.setItem(OVERRIDES_STORAGE_KEY, JSON.stringify(overrides)); } catch (e) { /* ignore */ }
+    }
+
+    function overrideKey(itemName, store) {
+      return itemName + '|' + store;
+    }
+
+    // Returns a fresh copy of items with any verified overrides swapped in
+    // for the GroceryPulse-scraped price, so every downstream computation
+    // (totals, mix & match, halal filtering) automatically uses the
+    // corrected numbers without needing to know overrides exist at all.
+    function applyOverrides(items, overrides) {
+      return items.map((item) => {
+        const patchedPrices = Object.assign({}, item.prices);
+        for (const store of Object.keys(patchedPrices)) {
+          const key = overrideKey(item.name, store);
+          if (overrides[key]) patchedPrices[store] = overrides[key].price;
+        }
+        return Object.assign({}, item, { prices: patchedPrices });
+      });
+    }
+
+    function escapeAttr(str) {
+      return String(str).replace(/"/g, '&quot;');
+    }
+
+    // Per-item "which stores are worth checking" shortlist. Defaults to
+    // every eligible store being checked; as you learn a store's never
+    // worth it for a given item, unchecking it here remembers that choice
+    // for next time instead of re-showing all stores every single week.
+    const VERIFY_SHORTLIST_KEY = 'grocery-verify-shortlist-v1';
+
+    function loadShortlist() {
+      try {
+        const raw = localStorage.getItem(VERIFY_SHORTLIST_KEY);
+        return raw ? JSON.parse(raw) : {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveShortlist(shortlist) {
+      try { localStorage.setItem(VERIFY_SHORTLIST_KEY, JSON.stringify(shortlist)); } catch (e) { /* ignore */ }
+    }
+
+    // Builds the "Verify prices" panel: for every item, every store that's
+    // actually eligible for it (halal-excluded stores are still skipped,
+    // since that's a hard policy, not a pricing question) — not just
+    // whichever store the algorithm currently picked. The whole point of
+    // this panel is to catch cases where GroceryPulse's data is wrong or
+    // missing for a store that never got a chance to compete in the first
+    // place; limiting checks to the "winning" store would hide exactly
+    // the errors this is meant to catch. Each store has its own checkbox
+    // so you can build up a per-item shortlist over time as you learn
+    // which stores are actually worth checking for that item; unchecked
+    // stores are remembered and stay unchecked next time.
+    function renderVerifyPanel(items, stores, storesCfg, assignments, cheapestSingle, overrides) {
+      const panel = document.getElementById('verify-panel');
+      const shortlist = loadShortlist();
+
+      panel.innerHTML = items.map((item) => {
+        const assignment = assignments.find((a) => a.name === item.name);
+        const searchTerm = item.name.split(',')[0].trim();
+        const eligibleStores = stores.filter((store) => isEligible(item, store, storesCfg));
+        const savedSelection = shortlist[item.name];
+        // Default: everything checked, until you've explicitly narrowed it down.
+        const isChecked = (store) => savedSelection ? savedSelection.includes(store) : true;
+        const checkedCount = eligibleStores.filter(isChecked).length;
+
+        const storeRows = eligibleStores.map((store) => {
+          const key = overrideKey(item.name, store);
+          const override = overrides[key];
+          const currentPrice = item.prices[store];
+          const flippUrl = 'https://flipp.com/search/' + encodeURIComponent(searchTerm + ' ' + store);
+          const note = override
+            ? 'Verified ' + formatUpdated(override.verifiedAt) + ' — was $' + override.price.toFixed(2)
+            : 'Not verified';
+          const badges = [];
+          if (assignment && assignment.assignedStore === store) badges.push('mix pick');
+          if (cheapestSingle && cheapestSingle.store === store) badges.push('cheapest');
+          const badgeHtml = badges.length ? ' <span class="verify-badge">' + badges.join(' · ') + '</span>' : '';
+          return (
+            '<div class="verify-store-row" data-item="' + escapeAttr(item.name) + '" data-store="' + escapeAttr(store) + '" data-url="' + escapeAttr(flippUrl) + '">' +
+              '<input type="checkbox" class="verify-store-check"' + (isChecked(store) ? ' checked' : '') + '>' +
+              '<span class="verify-store-name">' + store + badgeHtml + '</span>' +
+              '<a class="verify-check-link" href="' + flippUrl + '" target="_blank" rel="noopener">Check on Flipp →</a>' +
+              '<input type="number" step="0.01" class="verify-input" placeholder="' + (currentPrice != null ? currentPrice.toFixed(2) : 'n/a') + '">' +
+              '<button type="button" class="verify-save-btn">Save</button>' +
+              (override ? '<button type="button" class="verify-clear-btn">Clear</button>' : '') +
+              '<span class="verify-note">' + note + '</span>' +
+            '</div>'
+          );
+        }).join('');
+
+        return '<div class="verify-item" data-item="' + escapeAttr(item.name) + '"><div class="verify-item-header"><span class="verify-item-name">' + item.name + '</span>' +
+          '<button type="button" class="verify-checkall-btn">Check selected (<span class="verify-checked-count">' + checkedCount + '</span>) →</button></div>' +
+          storeRows + '</div>';
+      }).join('');
     }
 
     function isEligible(item, store, storesCfg) {
@@ -572,7 +774,7 @@
       }
       showTripBar(selectedNames.length, allItems.length);
 
-      const items = allItems.filter((i) => selectedNames.includes(i.name));
+      const items = applyOverrides(allItems.filter((i) => selectedNames.includes(i.name)), loadOverrides());
 
       const updated = formatUpdated(generatedAt);
       document.getElementById('lede').textContent =
@@ -714,12 +916,81 @@
             : '')
         );
 
+        renderVerifyPanel(items, stores, storesCfg, assignments, cheapestSingle, loadOverrides());
       }
 
       document.getElementById('dial').hidden = false;
       document.getElementById('mult-slider').addEventListener('input', renderDynamic);
       document.getElementById('winter-toggle').addEventListener('change', renderDynamic);
       renderDynamic();
+
+      // --- verify panel: toggle visibility ---
+      const verifyToggle = document.getElementById('verify-toggle');
+      const verifyPanel = document.getElementById('verify-panel');
+      verifyToggle.hidden = false;
+      verifyToggle.addEventListener('click', () => {
+        verifyPanel.hidden = !verifyPanel.hidden;
+        verifyToggle.textContent = verifyPanel.hidden ? 'Verify prices ▾' : 'Verify prices ▴';
+      });
+
+      // --- verify panel: delegated events (panel content is rebuilt on
+      // every dial move, so listeners live on the stable container) ---
+      verifyPanel.addEventListener('change', (e) => {
+        if (!e.target.classList.contains('verify-store-check')) return;
+        const itemEl = e.target.closest('.verify-item');
+        const rowEl = e.target.closest('.verify-store-row');
+        const itemName = itemEl.getAttribute('data-item');
+        const store = rowEl.getAttribute('data-store');
+
+        const shortlist = loadShortlist();
+        // Once you touch any checkbox for an item, that item gets an
+        // explicit saved list from then on (starting from "everything
+        // currently checked in the DOM", so unrelated boxes you'd already
+        // unchecked earlier in this render aren't lost).
+        const allRowsForItem = Array.from(itemEl.querySelectorAll('.verify-store-row'));
+        shortlist[itemName] = allRowsForItem
+          .filter((r) => r.querySelector('.verify-store-check').checked)
+          .map((r) => r.getAttribute('data-store'));
+        saveShortlist(shortlist);
+
+        const countEl = itemEl.querySelector('.verify-checked-count');
+        if (countEl) countEl.textContent = shortlist[itemName].length;
+      });
+
+      verifyPanel.addEventListener('click', (e) => {
+        if (e.target.classList.contains('verify-checkall-btn')) {
+          const itemEl = e.target.closest('.verify-item');
+          const checkedRows = Array.from(itemEl.querySelectorAll('.verify-store-row'))
+            .filter((r) => r.querySelector('.verify-store-check').checked);
+          if (!checkedRows.length) { alert('No stores selected for this item.'); return; }
+          checkedRows.forEach((r) => window.open(r.getAttribute('data-url'), '_blank'));
+          return;
+        }
+
+        if (e.target.classList.contains('verify-save-btn')) {
+          const rowEl = e.target.closest('.verify-store-row');
+          const itemName = rowEl.getAttribute('data-item');
+          const store = rowEl.getAttribute('data-store');
+          const input = rowEl.querySelector('.verify-input');
+          const value = parseFloat(input.value);
+          if (isNaN(value) || value <= 0) { alert('Enter a valid price first.'); return; }
+          const overrides = loadOverrides();
+          overrides[overrideKey(itemName, store)] = { price: value, verifiedAt: new Date().toISOString() };
+          saveOverrides(overrides);
+          location.reload();
+          return;
+        }
+
+        if (e.target.classList.contains('verify-clear-btn')) {
+          const rowEl = e.target.closest('.verify-store-row');
+          const itemName = rowEl.getAttribute('data-item');
+          const store = rowEl.getAttribute('data-store');
+          const overrides = loadOverrides();
+          delete overrides[overrideKey(itemName, store)];
+          saveOverrides(overrides);
+          location.reload();
+        }
+      });
 
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       document.querySelectorAll('.receipt').forEach((el) => {
