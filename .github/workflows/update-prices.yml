@@ -26,21 +26,21 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        working-directory: grocerypulse-screenshot
         run: npm install
 
       - name: Install Chromium for Playwright
-        working-directory: grocerypulse-screenshot
         run: npx playwright install --with-deps chromium
 
       - name: Run scraper
-        working-directory: grocerypulse-screenshot
         run: node scrape.js
+
+      - name: Convert scraped CSV into data.json
+        run: node csv-to-data.js
 
       - name: Commit updated data.json if it changed
         run: |
           git config user.name "grocery-price-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add grocery-site/data.json
+          git add data.json
           git diff --staged --quiet || git commit -m "chore: weekly grocery price update"
           git push
