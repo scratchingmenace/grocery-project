@@ -35,7 +35,7 @@ const MY_ITEMS = [
   'Apples, ~2kg Bag',
   'Strawberries, 454g',
   'Oranges, per kg',
-  'Blueberries, Fresh 454g',
+  'Blueberries, Fresh 454g (1lb)',
   'Potatoes, 10lb Bag',
   'Onions, 3lb Bag',
   'Carrots, 2lb Bag',
