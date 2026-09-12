@@ -32,33 +32,41 @@
   :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
   .num { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
 
-  .masthead { text-align: center; margin-bottom: 30px; padding: 0 8px; }
+  .masthead { text-align: center; margin-bottom: 34px; padding: 0 8px; }
   h1 { font-weight: 700; font-size: 30px; line-height: 1.15; margin: 0; letter-spacing: -0.2px; }
   .lede { color: var(--ink-soft); font-size: 15px; margin: 12px auto 0; line-height: 1.55; max-width: 38ch; }
-  .scan-line { font-size: 13px; color: var(--ink-faint); margin-top: 16px; }
+
+  .back-row { margin-bottom: 18px; }
+  .back-btn { background: none; border: none; font: inherit; font-size: 13px; color: var(--ink-faint); cursor: pointer; padding: 0; text-decoration: underline; }
+  .back-btn:hover { color: var(--stamp); }
+
+  /* ---- Home screen ---- */
+  .cta-btn {
+    display: block; width: 100%; background: var(--stamp); color: var(--receipt); border: none;
+    border-radius: 8px; padding: 18px; font-family: inherit; font-weight: 700; font-size: 17px;
+    letter-spacing: 0.2px; cursor: pointer; box-shadow: 0 14px 24px -14px rgba(178,58,46,.5);
+  }
+  .cta-btn:hover { opacity: 0.94; }
+  .recap-card {
+    background: var(--receipt); border-left: 3px solid var(--rule); padding: 16px 18px;
+    margin-bottom: 26px; font-size: 13px; color: var(--ink-soft);
+  }
+  .recap-title { font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 6px; }
+  .recap-line { display: flex; justify-content: space-between; padding: 3px 0; }
 
   /* ---- Build-your-list notepad ---- */
   .listpad {
-    background: var(--receipt);
-    border-left: 3px solid var(--stamp);
-    padding: 18px 18px 8px 22px;
-    margin-bottom: 34px;
-    box-shadow: 0 12px 22px -16px rgba(34,32,26,.35), 0 2px 5px rgba(34,32,26,.12);
+    background: var(--receipt); border-left: 3px solid var(--stamp); padding: 18px 18px 8px 22px;
+    margin-bottom: 30px; box-shadow: 0 12px 22px -16px rgba(34,32,26,.35), 0 2px 5px rgba(34,32,26,.12);
   }
   .listpad-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
   .listpad-title { font-weight: 700; font-size: 15px; }
   .listpad-actions { display: flex; gap: 10px; }
-  .listpad-actions button {
-    background: none; border: none; padding: 0; font: inherit; font-size: 12px;
-    color: var(--ink-faint); text-decoration: underline; cursor: pointer;
-  }
+  .listpad-actions button { background: none; border: none; padding: 0; font: inherit; font-size: 12px; color: var(--ink-faint); text-decoration: underline; cursor: pointer; }
   .listpad-actions button:hover { color: var(--stamp); }
   .listpad-count { font-size: 12px; color: var(--ink-faint); margin-bottom: 10px; }
 
-  .list-row {
-    display: flex; align-items: center; justify-content: space-between; gap: 10px;
-    padding: 8px 0; border-bottom: 1px dashed var(--rule);
-  }
+  .list-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--rule); }
   .list-row:last-child { border-bottom: none; }
   .list-check { display: flex; align-items: center; gap: 9px; min-width: 0; cursor: pointer; }
   .list-check input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--stamp); flex-shrink: 0; cursor: pointer; }
@@ -66,94 +74,32 @@
   .list-name.off { color: var(--ink-faint); text-decoration: line-through; }
 
   .qty-stepper { display: flex; align-items: center; gap: 0; flex-shrink: 0; }
-  .qty-btn {
-    width: 24px; height: 24px; border: 1px solid var(--rule); background: var(--paper);
-    color: var(--ink); font-size: 15px; line-height: 1; cursor: pointer; font-family: inherit;
-    display: flex; align-items: center; justify-content: center;
-  }
+  .qty-btn { width: 24px; height: 24px; border: 1px solid var(--rule); background: var(--paper); color: var(--ink); font-size: 15px; line-height: 1; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; }
   .qty-btn:first-child { border-radius: 4px 0 0 4px; }
   .qty-btn:last-child { border-radius: 0 4px 4px 0; }
-  .qty-input {
-    width: 32px; height: 24px; border: 1px solid var(--rule); border-left: none; border-right: none;
-    text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--ink);
-    background: var(--receipt); -moz-appearance: textfield;
-  }
+  .qty-input { width: 32px; height: 24px; border: 1px solid var(--rule); border-left: none; border-right: none; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--ink); background: var(--receipt); -moz-appearance: textfield; }
   .qty-input::-webkit-outer-spin-button, .qty-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
-  .locked-msg { font-size: 13px; color: var(--ink-faint); padding: 4px 0 10px; }
+  /* ---- Compact plan-picker cards ---- */
+  .picker-label { font-size: 13px; color: var(--ink-faint); margin-bottom: 12px; }
+  .plan-cards { display: flex; flex-direction: column; gap: 14px; }
+  .plan-card { background: var(--receipt); border: 1px solid var(--rule); border-radius: 8px; padding: 16px 18px; }
+  .plan-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .plan-label { font-weight: 700; font-size: 15.5px; text-transform: uppercase; letter-spacing: 0.3px; }
+  .plan-sub { font-size: 12.5px; color: var(--ink-soft); margin-top: 3px; max-width: 26ch; }
+  .plan-total { font-size: 18px; font-weight: 700; text-align: right; }
+  .plan-savings { font-size: 11px; color: var(--stamp); font-weight: 700; text-align: right; margin-top: 2px; }
+  .plan-card-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; gap: 10px; }
+  .see-items-btn { background: none; border: none; font: inherit; font-size: 12px; color: var(--ink-faint); text-decoration: underline; cursor: pointer; padding: 0; }
+  .see-items-btn:hover { color: var(--stamp); }
+  .shop-btn { background: var(--ink); color: var(--receipt); border: none; border-radius: 5px; padding: 8px 14px; font-family: inherit; font-weight: 700; font-size: 12.5px; cursor: pointer; }
+  .shop-btn:hover { opacity: 0.9; }
 
-  /* ---- Session bar (active shopping trip) ---- */
-  .session-bar {
-    background: var(--ink); color: var(--receipt); border-radius: 6px;
-    padding: 14px 16px; margin-bottom: 30px; display: flex; align-items: center;
-    justify-content: space-between; gap: 12px; flex-wrap: wrap;
-  }
-  .session-info { min-width: 0; }
-  .session-label { font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: #C9C2AC; }
-  .session-plan { font-weight: 700; font-size: 15px; margin-top: 2px; }
-  .session-progress { font-size: 12.5px; color: #C9C2AC; margin-top: 3px; }
-  .end-btn {
-    background: var(--stamp); color: var(--receipt); border: none; border-radius: 5px;
-    padding: 9px 16px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer;
-    flex-shrink: 0;
-  }
-  .end-btn:hover { opacity: 0.9; }
-
-  /* ---- Receipts ---- */
-  .receipts { display: flex; flex-direction: column; gap: 42px; }
-
-  .receipt {
-    position: relative;
-    background: var(--receipt);
-    padding: 26px 22px 4px;
-    box-shadow: 0 16px 28px -18px rgba(34,32,26,.4), 0 3px 6px rgba(34,32,26,.15);
-  }
-  .receipts .receipt:nth-child(1) { transform: rotate(-0.6deg); }
-  .receipts .receipt:nth-child(2) { transform: rotate(0.5deg); }
-  .receipts .receipt:nth-child(3) { transform: rotate(-0.4deg); }
-  @media (max-width: 480px) { .receipt { transform: none !important; } }
-
-  .receipt::after {
-    content: "";
-    position: absolute; left: 0; right: 0; bottom: -7px; height: 14px;
-    background-image: radial-gradient(circle, var(--paper) 3.4px, transparent 3.6px);
-    background-size: 14px 14px; background-position: 0 center; background-repeat: repeat-x;
-  }
-
-  .stamp {
-    position: absolute; top: -12px; right: 20px; transform: rotate(-8deg);
-    border: 2px solid var(--stamp); color: var(--stamp); font-weight: 700; font-size: 11px;
-    letter-spacing: 0.5px; text-transform: uppercase; padding: 4px 9px 3px; border-radius: 3px;
-    background: var(--receipt); z-index: 2;
-  }
-
-  .receipt-head {
-    width: 100%; background: none; border: none; padding: 0; margin: 0; cursor: pointer;
-    text-align: left; color: inherit; display: flex; align-items: flex-start;
-    justify-content: space-between; gap: 14px; font: inherit; border-radius: 4px;
-  }
-  .head-left { min-width: 0; }
-  .store-name { font-weight: 700; font-size: 19px; text-transform: uppercase; letter-spacing: 0.4px; }
-  .store-sub { font-size: 13px; color: var(--ink-soft); margin-top: 5px; line-height: 1.4; max-width: 30ch; }
-  .head-right { display: flex; align-items: flex-start; gap: 10px; flex-shrink: 0; }
-  .total-block { text-align: right; }
-  .total-label { display: block; font-size: 10px; letter-spacing: 1px; color: var(--ink-faint); text-transform: uppercase; margin-bottom: 2px; }
-  .total-amt { font-size: 18px; font-weight: 700; }
-  .chev { transition: transform 220ms ease; flex-shrink: 0; opacity: 0.75; margin-top: 2px; }
-  .chev.open { transform: rotate(180deg); }
-
-  .start-btn {
-    background: none; border: 1px solid var(--ink); color: var(--ink); font-family: inherit;
-    font-size: 11.5px; font-weight: 700; letter-spacing: 0.2px; text-transform: uppercase;
-    padding: 5px 11px; border-radius: 4px; cursor: pointer; margin-top: 10px;
-  }
-  .start-btn:hover { background: var(--ink); color: var(--receipt); }
-
-  .acc-body { overflow: hidden; display: grid; grid-template-rows: 0fr; transition: grid-template-rows 300ms ease; margin-top: 0; }
-  .acc-body.open { grid-template-rows: 1fr; margin-top: 18px; }
+  .acc-body { overflow: hidden; display: grid; grid-template-rows: 0fr; transition: grid-template-rows 280ms ease; margin-top: 0; }
+  .acc-body.open { grid-template-rows: 1fr; margin-top: 12px; }
   .acc-body > div { min-height: 0; overflow: hidden; }
 
-  .item-row { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px dashed var(--rule); font-size: 13.5px; }
+  .item-row { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px dashed var(--rule); font-size: 13px; }
   .item-row:last-child { border-bottom: none; }
   .item-row .name { color: var(--ink); }
   .item-row.dim .name { color: var(--ink-soft); }
@@ -161,39 +107,42 @@
   .item-row.dim .price { color: var(--ink-soft); }
   .item-row .price.na { color: var(--ink-faint); font-weight: 400; }
   .unit-hint { display: block; font-size: 10.5px; color: var(--ink-faint); font-weight: 400; margin-top: 1px; }
+  .mini-group-store { font-weight: 700; font-size: 12.5px; margin: 10px 0 4px; }
+  .mini-group-store:first-child { margin-top: 0; }
+  .footnote { font-size: 12px; color: var(--ink-faint); margin-top: 20px; line-height: 1.55; text-align: center; }
 
-  .group-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; gap: 10px; }
-  .group-head-left { min-width: 0; }
-  .group-head-top { display: flex; align-items: center; gap: 6px; }
-  .group-store { font-weight: 700; font-size: 14px; }
-  .group-count { font-size: 12px; color: var(--ink-faint); }
-  .group-justify { font-size: 11.5px; color: var(--stamp); margin-top: 3px; }
-  .group-subtotal { font-size: 13.5px; color: var(--ink-soft); font-weight: 500; flex-shrink: 0; }
-  .group { margin-bottom: 18px; }
-  .group:last-child { margin-bottom: 0; }
-
-  .grand-total { display: flex; justify-content: space-between; align-items: baseline; border-top: 3px double var(--ink); padding-top: 10px; margin-top: 4px; font-weight: 700; font-size: 15px; }
-
-  .barcode {
-    height: 26px; margin: 16px 0 6px;
-    background-image: repeating-linear-gradient(90deg,
-      var(--ink) 0 2px, transparent 2px 3px, var(--ink) 3px 4px, transparent 4px 6px,
-      var(--ink) 6px 9px, transparent 9px 11px, var(--ink) 11px 12px, transparent 12px 15px);
-    opacity: 0.75;
+  /* ---- Session bar ---- */
+  .session-bar {
+    background: var(--ink); color: var(--receipt); border-radius: 6px; padding: 14px 16px; margin-bottom: 26px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
   }
-  .receipt-no { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-faint); text-align: center; letter-spacing: 0.4px; }
+  .session-info { min-width: 0; }
+  .session-label { font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: #C9C2AC; }
+  .session-plan { font-weight: 700; font-size: 15px; margin-top: 2px; }
+  .session-progress { font-size: 12.5px; color: #C9C2AC; margin-top: 3px; }
+  .end-btn { background: var(--stamp); color: var(--receipt); border: none; border-radius: 5px; padding: 9px 16px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; flex-shrink: 0; }
+  .end-btn:hover { opacity: 0.9; }
 
-  .footnote { font-size: 12.5px; color: var(--ink-faint); margin-top: 30px; line-height: 1.55; padding: 0 8px; text-align: center; }
-  .loading, .empty-msg { color: var(--ink-soft); font-size: 14px; padding: 48px 0; text-align: center; }
+  /* ---- Receipt-styled shopping checklist + trip summary ---- */
+  .receipt {
+    position: relative; background: var(--receipt); padding: 26px 22px 4px;
+    box-shadow: 0 16px 28px -18px rgba(34,32,26,.4), 0 3px 6px rgba(34,32,26,.15);
+  }
+  .receipt::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 14px;
+    background-image: radial-gradient(circle, var(--paper) 3.4px, transparent 3.6px);
+    background-size: 14px 14px; background-position: 0 center; background-repeat: repeat-x;
+  }
+  .store-name { font-weight: 700; font-size: 19px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .store-sub { font-size: 13px; color: var(--ink-soft); margin-top: 5px; line-height: 1.4; }
 
-  /* ---- Shopping-mode checklist rows ---- */
   .shop-group-head { margin-bottom: 4px; }
   .shop-group-store { font-weight: 700; font-size: 14px; }
   .shop-group-progress { font-size: 12px; color: var(--ink-faint); margin-top: 2px; }
   .shop-row {
     width: 100%; background: none; border: none; padding: 12px 0; margin: 0; cursor: pointer;
-    text-align: left; font: inherit; color: inherit; display: flex; align-items: center;
-    gap: 12px; border-bottom: 1px dashed var(--rule);
+    text-align: left; font: inherit; color: inherit; display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px dashed var(--rule);
   }
   .shop-group:last-child .shop-row:last-child { border-bottom: none; }
   .check-box { width: 20px; height: 20px; flex-shrink: 0; }
@@ -204,55 +153,39 @@
   .shop-group { margin-bottom: 22px; }
   .shop-group:last-child { margin-bottom: 0; }
 
-  /* ---- Trip summary ---- */
+  .barcode {
+    height: 26px; margin: 16px 0 6px;
+    background-image: repeating-linear-gradient(90deg,
+      var(--ink) 0 2px, transparent 2px 3px, var(--ink) 3px 4px, transparent 4px 6px,
+      var(--ink) 6px 9px, transparent 9px 11px, var(--ink) 11px 12px, transparent 12px 15px);
+    opacity: 0.75;
+  }
+  .receipt-no { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-faint); text-align: center; letter-spacing: 0.4px; }
+
   .summary-row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px dashed var(--rule); font-size: 14px; }
   .summary-row:last-child { border-bottom: none; }
   .summary-row .label { color: var(--ink-soft); }
   .summary-row .val { font-weight: 600; }
-  .done-btn {
-    background: var(--ink); color: var(--receipt); border: none; border-radius: 5px;
-    padding: 10px 18px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer;
-    margin-top: 18px; width: 100%;
-  }
+  .done-btn { background: var(--ink); color: var(--receipt); border: none; border-radius: 5px; padding: 10px 18px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; margin-top: 18px; width: 100%; }
   .done-btn:hover { opacity: 0.9; }
 
-  @media (prefers-reduced-motion: reduce) { .acc-body, .chev { transition: none !important; } }
-  @media (max-width: 400px) { h1 { font-size: 25px; } .store-name { font-size: 17px; } .total-amt { font-size: 16px; } }
+  .loading, .empty-msg { color: var(--ink-soft); font-size: 14px; padding: 48px 0; text-align: center; }
+
+  @media (prefers-reduced-motion: reduce) { .acc-body { transition: none !important; } }
+  @media (max-width: 400px) { h1 { font-size: 25px; } .store-name { font-size: 17px; } }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="masthead">
-      <h1>Where to buy your list</h1>
-      <p class="lede">Three ways to shop the same items — one stop at Superstore, one stop at the cheapest complete store, or detouring to a store only when the bulk savings are worth the drive.</p>
-      <p class="scan-line" id="meta-line">Loading…</p>
-    </div>
-
-    <div class="listpad" id="listpad" style="display:none;">
-      <div class="listpad-head">
-        <span class="listpad-title">Build your list</span>
-        <span class="listpad-actions">
-          <button type="button" id="select-all">select all</button>
-          <button type="button" id="clear-all">clear all</button>
-        </span>
-      </div>
-      <div class="listpad-count" id="listpad-count"></div>
-      <div id="listpad-body"></div>
-    </div>
-
-    <div id="session-bar-slot"></div>
-    <div class="receipts" id="cards"><div class="loading">Loading today's prices…</div></div>
-  </div>
+  <div class="wrap" id="app"><div class="loading">Loading today's prices…</div></div>
 
   <script>
     const PIN_SVG = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#22201A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>';
-    const CHEV_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B8570" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>';
     const BOX_EMPTY_SVG = '<svg class="check-box" viewBox="0 0 24 24" fill="none" stroke="#5B5646" stroke-width="1.6"><rect x="3.5" y="3.5" width="17" height="17" rx="3"></rect></svg>';
     const BOX_CHECKED_SVG = '<svg class="check-box" viewBox="0 0 24 24" fill="none" stroke="#B23A2E" stroke-width="1.6"><rect x="3.5" y="3.5" width="17" height="17" rx="3" fill="#B23A2E"></rect><path d="M7 12.5l3 3 7-7" stroke="#FBF8F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
 
     const SEL_KEY = 'grocery-list-selections-v1';
     const SESSION_KEY = 'grocery-shopping-session-v1';
-    const SUMMARY_KEY = 'grocery-shopping-summary-v1';
+    const LAST_TRIP_KEY = 'grocery-last-trip-v1';
 
     const fmt = (n) => '$' + n.toFixed(2);
 
@@ -282,11 +215,10 @@
       return sel;
     }
     function saveSelections(sel) { try { localStorage.setItem(SEL_KEY, JSON.stringify(sel)); } catch (e) {} }
-
     function loadSession() { try { return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch (e) { return null; } }
     function saveSession(s) { try { s ? localStorage.setItem(SESSION_KEY, JSON.stringify(s)) : localStorage.removeItem(SESSION_KEY); } catch (e) {} }
-    function loadSummary() { try { return JSON.parse(localStorage.getItem(SUMMARY_KEY) || 'null'); } catch (e) { return null; } }
-    function saveSummary(s) { try { s ? localStorage.setItem(SUMMARY_KEY, JSON.stringify(s)) : localStorage.removeItem(SUMMARY_KEY); } catch (e) {} }
+    function loadLastTrip() { try { return JSON.parse(localStorage.getItem(LAST_TRIP_KEY) || 'null'); } catch (e) { return null; } }
+    function saveLastTrip(s) { try { s ? localStorage.setItem(LAST_TRIP_KEY, JSON.stringify(s)) : localStorage.removeItem(LAST_TRIP_KEY); } catch (e) {} }
 
     function computeStoreTotal(items, store) {
       let total = 0, missing = 0;
@@ -350,30 +282,13 @@
       return { groups, total, storeCount: groups.length, almost };
     }
 
-    function itemRowHtml(name, qty, unitPrice, lineTotal, dim, naLabel) {
+    function itemRowHtml(name, qty, unitPrice, lineTotal, naLabel) {
       const displayName = qty > 1 ? (name + ' ×' + qty) : name;
       let priceHtml;
       if (unitPrice == null) priceHtml = '<span class="price na num">' + (naLabel || 'not carried') + '</span>';
       else if (qty > 1) priceHtml = '<span class="price num">' + fmt(lineTotal) + '<span class="unit-hint">' + fmt(unitPrice) + ' ea</span></span>';
       else priceHtml = '<span class="price num">' + fmt(lineTotal) + '</span>';
-      return '<div class="item-row' + (dim ? ' dim' : '') + '"><span class="name">' + displayName + '</span>' + priceHtml + '</div>';
-    }
-
-    function receiptHtml(id, storeLabel, subtitle, total, stampText, bodyHtml, expanded, receiptNo, startBtn) {
-      const stampHtml = stampText ? '<div class="stamp">' + stampText + '</div>' : '';
-      const startHtml = startBtn ? '<button type="button" class="start-btn" data-start="' + id + '">Start shopping</button>' : '';
-      return (
-        '<div class="receipt" data-id="' + id + '">' + stampHtml +
-          '<button class="receipt-head" data-toggle="' + id + '" aria-expanded="' + (expanded ? 'true' : 'false') + '">' +
-            '<div class="head-left"><div class="store-name">' + storeLabel + '</div><div class="store-sub">' + subtitle + '</div>' + startHtml + '</div>' +
-            '<div class="head-right"><div class="total-block"><span class="total-label">Total</span><span class="total-amt num">' + fmt(total) + '</span></div>' +
-              '<span class="chev' + (expanded ? ' open' : '') + '" data-chev="' + id + '">' + CHEV_SVG + '</span></div>' +
-          '</button>' +
-          '<div class="acc-body' + (expanded ? ' open' : '') + '" data-body="' + id + '"><div>' + bodyHtml +
-            '<div class="barcode" aria-hidden="true"></div><div class="receipt-no">No. ' + receiptNo + ' — thanks for shopping</div>' +
-          '</div></div>' +
-        '</div>'
-      );
+      return '<div class="item-row"><span class="name">' + displayName + '</span>' + priceHtml + '</div>';
     }
 
     function formatUpdated(iso) {
@@ -381,7 +296,9 @@
       const d = new Date(iso);
       return 'prices checked ' + d.toLocaleDateString('en-CA', { weekday: 'short', month: 'short', day: 'numeric' });
     }
-
+    function formatDate(ms) {
+      return new Date(ms).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' });
+    }
     function formatElapsed(ms) {
       const mins = Math.round(ms / 60000);
       if (mins < 1) return 'just started';
@@ -394,17 +311,17 @@
     let itemsMeta = [], stores = [], generatedAt = null, storeCfg = {}, tierDefaults = {}, homeStore = 'Superstore', halalExcluded = new Set();
     let selections = {};
     let session = null;
-    let summary = null;
+    let lastTrip = null;
+    let screen = 'home'; // 'home' | 'build' | 'shopping' | 'summary'
+    let justFinished = null; // trip object shown once on the summary screen
 
     function getActiveItems() {
       return itemsMeta
         .filter((i) => selections[i.name].included && selections[i.name].qty > 0)
         .map((i) => ({ ...i, qty: selections[i.name].qty }));
     }
-
     function naLabelFor(name, store) { return halalExcluded.has(name + '||' + store) ? 'no halal option' : 'not carried'; }
 
-    // Builds all three plans in one shared shape: { label, subtitle, groups, total, stampText, receiptNo }
     function buildPlans(activeItems) {
       const home = computeStoreTotal(activeItems, homeStore);
       const candidates = stores.filter((s) => s !== homeStore).map((s) => ({ store: s, ...computeStoreTotal(activeItems, s) }));
@@ -421,115 +338,54 @@
       const cheapRows = activeItems.map((i) => ({ name: i.name, qty: i.qty, unit: i.prices[cheapestSingle.store], lineTotal: (i.prices[cheapestSingle.store] || 0) * i.qty }));
 
       return {
-        home: {
-          label: homeStore, subtitle: 'All ' + activeItems.length + ' items in one trip', total: home.total, stampText: null,
-          groups: [{ store: homeStore, isHome: true, rows: homeRows, subtotal: home.total, justify: null }], receiptNo: '001',
-        },
-        cheapest: {
-          label: cheapestSingle.store, subtitle: 'All ' + activeItems.length + ' items, lowest single-store total', total: cheapestSingle.total,
-          stampText: savingsSingle > 0 ? ('Save ' + fmt(savingsSingle) + ' (' + pctSingle + '%)') : null,
-          groups: [{ store: cheapestSingle.store, isHome: false, rows: cheapRows, subtotal: cheapestSingle.total, justify: null }], receiptNo: '002',
-        },
-        mix: {
-          label: 'Worth-the-drive split', subtitle: mix.storeCount + ' stop' + (mix.storeCount > 1 ? 's' : '') + ' — only detours that pay for themselves',
-          total: mix.total, stampText: savingsMix > 0 ? ('Save ' + fmt(savingsMix) + ' (' + pctMix + '%)') : null,
-          groups: mix.groups, receiptNo: '003', almost: mix.almost,
-        },
+        home: { id: 'home', label: homeStore, subtitle: 'All ' + activeItems.length + ' items, one trip', total: home.total, savingsText: null,
+          groups: [{ store: homeStore, isHome: true, rows: homeRows, subtotal: home.total, justify: null }] },
+        cheapest: { id: 'cheapest', label: cheapestSingle.store, subtitle: 'All ' + activeItems.length + ' items, lowest single-store total', total: cheapestSingle.total,
+          savingsText: savingsSingle > 0 ? ('save ' + fmt(savingsSingle) + ' · ' + pctSingle + '%') : null,
+          groups: [{ store: cheapestSingle.store, isHome: false, rows: cheapRows, subtotal: cheapestSingle.total, justify: null }] },
+        mix: { id: 'mix', label: 'Worth-the-drive split', subtitle: mix.storeCount + ' stop' + (mix.storeCount > 1 ? 's' : '') + ' — only detours that pay for themselves',
+          total: mix.total, savingsText: savingsMix > 0 ? ('save ' + fmt(savingsMix) + ' · ' + pctMix + '%') : null,
+          groups: mix.groups, almost: mix.almost },
       };
     }
 
-    // ---------------- Rendering ----------------
+    // ---------------- Top-level render dispatcher ----------------
 
     function render() {
-      const listpadEl = document.getElementById('listpad');
-      const sessionSlot = document.getElementById('session-bar-slot');
-      const cardsEl = document.getElementById('cards');
-      const existingFoot = document.querySelector('.footnote');
-      if (existingFoot) existingFoot.remove();
+      const app = document.getElementById('app');
+      if (screen === 'home') app.innerHTML = homeHtml();
+      else if (screen === 'build') app.innerHTML = buildHtml();
+      else if (screen === 'shopping') app.innerHTML = shoppingHtml();
+      else if (screen === 'summary') app.innerHTML = summaryHtml();
+      attachHandlers();
+    }
 
-      if (summary) {
-        listpadEl.style.display = 'none';
-        sessionSlot.innerHTML = '';
-        renderSummary(cardsEl);
-        return;
-      }
+    function goHome() { screen = 'home'; render(); }
 
+    // ---------------- Home screen ----------------
+
+    function homeHtml() {
+      const recap = lastTrip ? (
+        '<div class="recap-card"><div class="recap-title">Last trip · ' + formatDate(lastTrip.endedAt) + '</div>' +
+          '<div class="recap-line"><span>' + lastTrip.planLabel + '</span><span class="num">' + fmt(lastTrip.spent) + '</span></div>' +
+          '<div class="recap-line"><span>' + lastTrip.collected + ' of ' + lastTrip.totalItems + ' items</span><span>' + formatElapsed(lastTrip.elapsedMs) + '</span></div>' +
+        '</div>'
+      ) : '';
+      return (
+        '<div class="masthead"><h1>Where to buy your list</h1>' +
+        '<p class="lede">Build your list, see what it costs at Superstore, the cheapest single store, or a smart multi-stop split — then shop it in real time.</p></div>' +
+        recap +
+        '<button type="button" class="cta-btn" id="start-shopping-btn">Start shopping</button>'
+      );
+    }
+
+    // ---------------- Build-your-list screen ----------------
+
+    function buildHtml() {
       const activeItems = getActiveItems();
-      document.getElementById('meta-line').textContent =
-        activeItems.length + ' of ' + itemsMeta.length + ' items on the list, ' + formatUpdated(generatedAt) + '.';
+      const plans = activeItems.length ? buildPlans(activeItems) : null;
 
-      if (session) {
-        listpadEl.style.display = 'none';
-        renderSessionBar(sessionSlot, activeItems);
-        renderShoppingCard(cardsEl, activeItems);
-        return;
-      }
-
-      sessionSlot.innerHTML = '';
-      listpadEl.style.display = '';
-      renderListpad();
-
-      if (activeItems.length === 0) {
-        cardsEl.innerHTML = '<div class="empty-msg">Nothing selected yet — check off items above to see totals.</div>';
-        return;
-      }
-
-      const plans = buildPlans(activeItems);
-      const html =
-        receiptHtml('home', plans.home.label, plans.home.subtitle, plans.home.total, plans.home.stampText, plans.home.groups[0].rows.map((r) => itemRowHtml(r.name, r.qty, r.unit, r.lineTotal, false, naLabelFor(r.name, homeStore))).join(''), false, plans.home.receiptNo, true) +
-        receiptHtml('cheapest', plans.cheapest.label, plans.cheapest.subtitle, plans.cheapest.total, plans.cheapest.stampText, plans.cheapest.groups[0].rows.map((r) => itemRowHtml(r.name, r.qty, r.unit, r.lineTotal, false, naLabelFor(r.name, plans.cheapest.label))).join(''), false, plans.cheapest.receiptNo, true) +
-        receiptHtml('mix', plans.mix.label, plans.mix.subtitle, plans.mix.total, plans.mix.stampText, renderMixBody(plans.mix), true, plans.mix.receiptNo, true);
-
-      cardsEl.innerHTML = html;
-
-      let footnote = 'Only stores whose total basket savings clear their distance threshold get a special trip — everything else just rides along at ' + homeStore + '.';
-      if (plans.mix.almost.length) {
-        const a = plans.mix.almost.sort((x, y) => (y.storeSavings - y.threshold) - (x.storeSavings - x.threshold))[0];
-        footnote += ' ' + a.store + ' came close — ' + fmt(a.storeSavings) + ' saved, ' + fmt(a.threshold) + ' needed.';
-      }
-      cardsEl.insertAdjacentHTML('afterend', '<p class="footnote">' + footnote + '</p>');
-
-      document.querySelectorAll('[data-toggle]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-toggle');
-          const body = document.querySelector('[data-body="' + id + '"]');
-          toggleAcc(id, !body.classList.contains('open'));
-        });
-      });
-      document.querySelectorAll('[data-start]').forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          startSession(btn.getAttribute('data-start'));
-        });
-      });
-    }
-
-    function renderMixBody(mixPlan) {
-      return mixPlan.groups.map((g) => {
-        const rowsHtml = g.rows.map((r) => itemRowHtml(r.name, r.qty, r.unit, r.lineTotal, true)).join('');
-        const justifyHtml = g.justify
-          ? '<div class="group-justify">saved ' + fmt(g.justify.storeSavings) + ' — clears the ' + fmt(g.justify.threshold) + ' needed for a ' + g.justify.tierLabel.toLowerCase() + '</div>' : '';
-        return (
-          '<div class="group"><div class="group-head"><div class="group-head-left">' +
-            '<div class="group-head-top">' + PIN_SVG + '<span class="group-store">' + g.store + (g.isHome ? ' (your regular stop)' : '') + '</span></div>' +
-            '<span class="group-count">' + g.rows.length + ' item' + (g.rows.length > 1 ? 's' : '') + '</span>' + justifyHtml +
-          '</div><span class="group-subtotal num">' + fmt(g.subtotal) + '</span></div>' + rowsHtml + '</div>'
-        );
-      }).join('') + '<div class="grand-total"><span>Grand total</span><span class="num">' + fmt(mixPlan.total) + '</span></div>';
-    }
-
-    function toggleAcc(id, open) {
-      const body = document.querySelector('[data-body="' + id + '"]');
-      const chev = document.querySelector('[data-chev="' + id + '"]');
-      const btn = document.querySelector('[data-toggle="' + id + '"]');
-      if (!body) return;
-      body.classList.toggle('open', open);
-      if (chev) chev.classList.toggle('open', open);
-      if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    }
-
-    function renderListpad() {
-      const rows = itemsMeta.map((item) => {
+      const listRows = itemsMeta.map((item) => {
         const s = selections[item.name];
         return (
           '<div class="list-row"><label class="list-check">' +
@@ -542,26 +398,159 @@
             '</span></div>'
         );
       }).join('');
-      document.getElementById('listpad-body').innerHTML = rows;
       const count = itemsMeta.filter((i) => selections[i.name].included && selections[i.name].qty > 0).length;
-      document.getElementById('listpad-count').textContent = count + ' of ' + itemsMeta.length + ' items selected';
 
-      document.querySelectorAll('[data-check]').forEach((el) => el.addEventListener('change', () => {
-        const name = el.getAttribute('data-check');
-        selections[name].included = el.checked;
-        if (el.checked && selections[name].qty === 0) selections[name].qty = 1;
+      let plansHtml = '<div class="empty-msg" style="padding:24px 0;">Check off items above to see your options.</div>';
+      if (plans) {
+        plansHtml =
+          '<div class="picker-label">Pick a plan once your list looks right</div><div class="plan-cards">' +
+          planCardHtml(plans.home) + planCardHtml(plans.cheapest) + planCardHtml(plans.mix) +
+          '</div>';
+        if (plans.mix.almost && plans.mix.almost.length) {
+          const a = plans.mix.almost.sort((x, y) => (y.storeSavings - y.threshold) - (x.storeSavings - x.threshold))[0];
+          plansHtml += '<p class="footnote">' + a.store + ' almost qualified for its own trip — ' + fmt(a.storeSavings) + ' saved, ' + fmt(a.threshold) + ' needed.</p>';
+        }
+      }
+
+      return (
+        '<div class="back-row"><button type="button" class="back-btn" id="back-home-btn">← back</button></div>' +
+        '<div class="listpad">' +
+          '<div class="listpad-head"><span class="listpad-title">Build your list</span>' +
+            '<span class="listpad-actions"><button type="button" id="select-all">select all</button><button type="button" id="clear-all">clear all</button></span></div>' +
+          '<div class="listpad-count">' + count + ' of ' + itemsMeta.length + ' items selected</div>' +
+          '<div>' + listRows + '</div>' +
+        '</div>' +
+        plansHtml
+      );
+    }
+
+    function planCardHtml(plan) {
+      const rowsHtml = plan.groups.map((g) => {
+        const header = plan.id === 'mix' ? '<div class="mini-group-store">' + g.store + (g.isHome ? ' (regular stop)' : '') + ' · ' + fmt(g.subtotal) + '</div>' : '';
+        return header + g.rows.map((r) => itemRowHtml(r.name, r.qty, r.unit, r.lineTotal, naLabelFor(r.name, g.store))).join('');
+      }).join('');
+      return (
+        '<div class="plan-card"><div class="plan-card-head">' +
+          '<div><div class="plan-label">' + plan.label + '</div><div class="plan-sub">' + plan.subtitle + '</div></div>' +
+          '<div><div class="plan-total num">' + fmt(plan.total) + '</div>' + (plan.savingsText ? '<div class="plan-savings">' + plan.savingsText + '</div>' : '') + '</div>' +
+        '</div>' +
+        '<div class="plan-card-actions">' +
+          '<button type="button" class="see-items-btn" data-see="' + plan.id + '">see items</button>' +
+          '<button type="button" class="shop-btn" data-start="' + plan.id + '">Shop this plan</button>' +
+        '</div>' +
+        '<div class="acc-body" data-body="' + plan.id + '"><div>' + rowsHtml + '</div></div>' +
+        '</div>'
+      );
+    }
+
+    // ---------------- Shopping screen ----------------
+
+    function shoppingHtml() {
+      const activeItems = getActiveItems();
+      const plans = buildPlans(activeItems);
+      const plan = plans[session.planId];
+      const allRows = plan.groups.flatMap((g) => g.rows);
+      const collected = allRows.filter((r) => session.checked[r.name]).length;
+
+      const groupsHtml = plan.groups.map((g) => {
+        const groupCollected = g.rows.filter((r) => session.checked[r.name]).length;
+        const rowsHtml = g.rows.map((r) => {
+          const isChecked = !!session.checked[r.name];
+          const nameLabel = r.qty > 1 ? (r.name + ' ×' + r.qty) : r.name;
+          const priceLabel = r.unit == null ? naLabelFor(r.name, g.store) : fmt(r.lineTotal);
+          return (
+            '<button type="button" class="shop-row' + (isChecked ? ' checked' : '') + '" data-item="' + r.name + '">' +
+              (isChecked ? BOX_CHECKED_SVG : BOX_EMPTY_SVG) +
+              '<span class="name">' + nameLabel + '</span><span class="price num">' + priceLabel + '</span>' +
+            '</button>'
+          );
+        }).join('');
+        return (
+          '<div class="shop-group"><div class="shop-group-head">' +
+            '<span class="shop-group-store">' + g.store + (g.isHome ? ' (your regular stop)' : '') + '</span>' +
+            '<div class="shop-group-progress">' + groupCollected + ' of ' + g.rows.length + ' collected · ' + fmt(g.subtotal) + '</div>' +
+          '</div>' + rowsHtml + '</div>'
+        );
+      }).join('');
+
+      return (
+        '<div class="session-bar"><div class="session-info">' +
+          '<div class="session-label">Now shopping</div><div class="session-plan">' + plan.label + '</div>' +
+          '<div class="session-progress">' + collected + ' of ' + allRows.length + ' collected · started ' + formatElapsed(Date.now() - session.startedAt) + ' ago</div>' +
+        '</div><button type="button" class="end-btn" id="end-shopping-btn">End shopping</button></div>' +
+        '<div class="receipt"><div class="store-name">' + plan.label + '</div>' +
+        '<div class="store-sub">Tap an item as you drop it in the cart</div><div style="margin-top:14px;">' + groupsHtml + '</div>' +
+        '<div class="barcode" aria-hidden="true"></div><div class="receipt-no">shopping now — good luck out there</div></div>'
+      );
+    }
+
+    // ---------------- Summary screen ----------------
+
+    function summaryHtml() {
+      const t = justFinished;
+      const pct = t.totalItems ? Math.round((t.collected / t.totalItems) * 100) : 0;
+      return (
+        '<div class="receipt"><div class="store-name">Trip complete</div>' +
+        '<div class="store-sub" style="margin-bottom:14px;">' + t.planLabel + '</div>' +
+        '<div class="summary-row"><span class="label">Items collected</span><span class="val num">' + t.collected + ' of ' + t.totalItems + ' (' + pct + '%)</span></div>' +
+        '<div class="summary-row"><span class="label">Time shopping</span><span class="val">' + formatElapsed(t.elapsedMs) + '</span></div>' +
+        '<div class="summary-row"><span class="label">Planned total</span><span class="val num">' + fmt(t.planned) + '</span></div>' +
+        '<div class="summary-row"><span class="label">Actually spent</span><span class="val num">' + fmt(t.spent) + '</span></div>' +
+        '<button type="button" class="done-btn" id="done-btn">Done</button>' +
+        '<div class="barcode" aria-hidden="true" style="margin-top:16px;"></div></div>'
+      );
+    }
+
+    // ---------------- Event wiring ----------------
+
+    function attachHandlers() {
+      const el = (id) => document.getElementById(id);
+
+      if (el('start-shopping-btn')) el('start-shopping-btn').addEventListener('click', () => { screen = 'build'; render(); });
+      if (el('back-home-btn')) el('back-home-btn').addEventListener('click', goHome);
+
+      if (el('select-all')) el('select-all').addEventListener('click', () => {
+        for (const item of itemsMeta) { selections[item.name].included = true; if (selections[item.name].qty === 0) selections[item.name].qty = item.qty || 1; }
+        saveSelections(selections); render();
+      });
+      if (el('clear-all')) el('clear-all').addEventListener('click', () => {
+        for (const item of itemsMeta) selections[item.name].included = false;
+        saveSelections(selections); render();
+      });
+
+      document.querySelectorAll('[data-check]').forEach((e) => e.addEventListener('change', () => {
+        const name = e.getAttribute('data-check');
+        selections[name].included = e.checked;
+        if (e.checked && selections[name].qty === 0) selections[name].qty = 1;
         saveSelections(selections); render();
       }));
-      document.querySelectorAll('[data-qty]').forEach((el) => el.addEventListener('change', () => {
-        const name = el.getAttribute('data-qty');
-        let v = parseInt(el.value, 10);
+      document.querySelectorAll('[data-qty]').forEach((e) => e.addEventListener('change', () => {
+        const name = e.getAttribute('data-qty');
+        let v = parseInt(e.value, 10);
         if (isNaN(v) || v < 0) v = 0;
         selections[name].qty = v;
         if (v === 0) selections[name].included = false;
         saveSelections(selections); render();
       }));
-      document.querySelectorAll('[data-inc]').forEach((el) => el.addEventListener('click', () => bump(el.getAttribute('data-inc'), 1)));
-      document.querySelectorAll('[data-dec]').forEach((el) => el.addEventListener('click', () => bump(el.getAttribute('data-dec'), -1)));
+      document.querySelectorAll('[data-inc]').forEach((e) => e.addEventListener('click', () => bump(e.getAttribute('data-inc'), 1)));
+      document.querySelectorAll('[data-dec]').forEach((e) => e.addEventListener('click', () => bump(e.getAttribute('data-dec'), -1)));
+
+      document.querySelectorAll('[data-see]').forEach((btn) => btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-see');
+        const body = document.querySelector('[data-body="' + id + '"]');
+        body.classList.toggle('open');
+      }));
+      document.querySelectorAll('[data-start]').forEach((btn) => btn.addEventListener('click', () => startSession(btn.getAttribute('data-start'))));
+
+      if (el('end-shopping-btn')) el('end-shopping-btn').addEventListener('click', endSession);
+      if (el('done-btn')) el('done-btn').addEventListener('click', () => { justFinished = null; goHome(); });
+
+      document.querySelectorAll('.shop-row').forEach((btn) => btn.addEventListener('click', () => {
+        const name = btn.getAttribute('data-item');
+        session.checked[name] = !session.checked[name];
+        saveSession(session);
+        render();
+      }));
     }
 
     function bump(name, delta) {
@@ -571,11 +560,10 @@
       saveSelections(selections); render();
     }
 
-    // ---------------- Shopping session ----------------
-
     function startSession(planId) {
       session = { planId, startedAt: Date.now(), checked: {} };
       saveSession(session);
+      screen = 'shopping';
       render();
     }
 
@@ -588,92 +576,13 @@
       const collected = allRows.filter((r) => session.checked[r.name]).length;
       const spent = allRows.filter((r) => session.checked[r.name]).reduce((s, r) => s + r.lineTotal, 0);
 
-      summary = {
-        planLabel: plan.label, totalItems: allRows.length, collected,
-        planned: plan.total, spent, elapsedMs: Date.now() - session.startedAt,
-      };
-      saveSummary(summary);
+      justFinished = { planLabel: plan.label, totalItems: allRows.length, collected, planned: plan.total, spent, elapsedMs: Date.now() - session.startedAt, endedAt: Date.now() };
+      lastTrip = justFinished;
+      saveLastTrip(lastTrip);
       session = null;
       saveSession(null);
+      screen = 'summary';
       render();
-    }
-
-    function renderSessionBar(slot, activeItems) {
-      const plans = buildPlans(activeItems);
-      const plan = plans[session.planId];
-      const allRows = plan.groups.flatMap((g) => g.rows);
-      const collected = allRows.filter((r) => session.checked[r.name]).length;
-      slot.innerHTML =
-        '<div class="session-bar"><div class="session-info">' +
-          '<div class="session-label">Now shopping</div>' +
-          '<div class="session-plan">' + plan.label + '</div>' +
-          '<div class="session-progress">' + collected + ' of ' + allRows.length + ' collected · started ' + formatElapsed(Date.now() - session.startedAt) + ' ago</div>' +
-        '</div><button type="button" class="end-btn" id="end-shopping-btn">End shopping</button></div>';
-      document.getElementById('end-shopping-btn').addEventListener('click', endSession);
-    }
-
-    function renderShoppingCard(cardsEl, activeItems) {
-      const plans = buildPlans(activeItems);
-      const plan = plans[session.planId];
-
-      const groupsHtml = plan.groups.map((g) => {
-        const groupCollected = g.rows.filter((r) => session.checked[r.name]).length;
-        const rowsHtml = g.rows.map((r) => {
-          const isChecked = !!session.checked[r.name];
-          const nameLabel = r.qty > 1 ? (r.name + ' ×' + r.qty) : r.name;
-          const priceLabel = r.unit == null ? (naLabelFor(r.name, g.store)) : fmt(r.lineTotal);
-          return (
-            '<button type="button" class="shop-row' + (isChecked ? ' checked' : '') + '" data-item="' + r.name + '">' +
-              (isChecked ? BOX_CHECKED_SVG : BOX_EMPTY_SVG) +
-              '<span class="name">' + nameLabel + '</span>' +
-              '<span class="price num">' + priceLabel + '</span>' +
-            '</button>'
-          );
-        }).join('');
-        return (
-          '<div class="shop-group"><div class="shop-group-head">' +
-            '<span class="shop-group-store">' + g.store + (g.isHome ? ' (your regular stop)' : '') + '</span>' +
-            '<div class="shop-group-progress">' + groupCollected + ' of ' + g.rows.length + ' collected · ' + fmt(g.subtotal) + '</div>' +
-          '</div>' + rowsHtml + '</div>'
-        );
-      }).join('');
-
-      cardsEl.innerHTML =
-        '<div class="receipt" style="transform:none;">' +
-          '<div class="head-left" style="margin-bottom:6px;"><div class="store-name">' + plan.label + '</div>' +
-          '<div class="store-sub">Tap an item as you drop it in the cart</div></div>' +
-          groupsHtml +
-          '<div class="barcode" aria-hidden="true"></div><div class="receipt-no">shopping now — good luck out there</div>' +
-        '</div>';
-
-      document.querySelectorAll('.shop-row').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const name = btn.getAttribute('data-item');
-          session.checked[name] = !session.checked[name];
-          saveSession(session);
-          render();
-        });
-      });
-    }
-
-    function renderSummary(cardsEl) {
-      const pct = summary.totalItems ? Math.round((summary.collected / summary.totalItems) * 100) : 0;
-      cardsEl.innerHTML =
-        '<div class="receipt" style="transform:none;">' +
-          '<div class="store-name">Trip complete</div>' +
-          '<div class="store-sub" style="margin-bottom:14px;">' + summary.planLabel + '</div>' +
-          '<div class="summary-row"><span class="label">Items collected</span><span class="val num">' + summary.collected + ' of ' + summary.totalItems + ' (' + pct + '%)</span></div>' +
-          '<div class="summary-row"><span class="label">Time shopping</span><span class="val">' + formatElapsed(summary.elapsedMs) + '</span></div>' +
-          '<div class="summary-row"><span class="label">Planned total</span><span class="val num">' + fmt(summary.planned) + '</span></div>' +
-          '<div class="summary-row"><span class="label">Actually spent</span><span class="val num">' + fmt(summary.spent) + '</span></div>' +
-          '<button type="button" class="done-btn" id="dismiss-summary-btn">Back to your plans</button>' +
-          '<div class="barcode" aria-hidden="true" style="margin-top:16px;"></div>' +
-        '</div>';
-      document.getElementById('dismiss-summary-btn').addEventListener('click', () => {
-        summary = null;
-        saveSummary(null);
-        render();
-      });
     }
 
     // ---------------- Init ----------------
@@ -692,7 +601,7 @@
         storeCfg = cfg.stores;
         tierDefaults = cfg.tierDefaults;
       } catch (e) {
-        document.getElementById('cards').innerHTML = '<div class="loading">Could not load data.json / stores-config.json — make sure both sit next to index.html.</div>';
+        document.getElementById('app').innerHTML = '<div class="loading">Could not load data.json / stores-config.json — make sure both sit next to index.html.</div>';
         return;
       }
 
@@ -702,17 +611,9 @@
 
       selections = loadSelections(itemsMeta);
       session = loadSession();
-      summary = session ? null : loadSummary();
+      lastTrip = loadLastTrip();
 
-      document.getElementById('select-all').addEventListener('click', () => {
-        for (const item of itemsMeta) { selections[item.name].included = true; if (selections[item.name].qty === 0) selections[item.name].qty = item.qty || 1; }
-        saveSelections(selections); render();
-      });
-      document.getElementById('clear-all').addEventListener('click', () => {
-        for (const item of itemsMeta) selections[item.name].included = false;
-        saveSelections(selections); render();
-      });
-
+      screen = session ? 'shopping' : 'home';
       render();
     }
 
