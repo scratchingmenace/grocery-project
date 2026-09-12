@@ -80,6 +80,26 @@
   }
   .qty-input::-webkit-outer-spin-button, .qty-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
+  .locked-msg { font-size: 13px; color: var(--ink-faint); padding: 4px 0 10px; }
+
+  /* ---- Session bar (active shopping trip) ---- */
+  .session-bar {
+    background: var(--ink); color: var(--receipt); border-radius: 6px;
+    padding: 14px 16px; margin-bottom: 30px; display: flex; align-items: center;
+    justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+  .session-info { min-width: 0; }
+  .session-label { font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: #C9C2AC; }
+  .session-plan { font-weight: 700; font-size: 15px; margin-top: 2px; }
+  .session-progress { font-size: 12.5px; color: #C9C2AC; margin-top: 3px; }
+  .end-btn {
+    background: var(--stamp); color: var(--receipt); border: none; border-radius: 5px;
+    padding: 9px 16px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer;
+    flex-shrink: 0;
+  }
+  .end-btn:hover { opacity: 0.9; }
+
+  /* ---- Receipts ---- */
   .receipts { display: flex; flex-direction: column; gap: 42px; }
 
   .receipt {
@@ -88,9 +108,9 @@
     padding: 26px 22px 4px;
     box-shadow: 0 16px 28px -18px rgba(34,32,26,.4), 0 3px 6px rgba(34,32,26,.15);
   }
-  .receipt:nth-child(1) { transform: rotate(-0.6deg); }
-  .receipt:nth-child(2) { transform: rotate(0.5deg); }
-  .receipt:nth-child(3) { transform: rotate(-0.4deg); }
+  .receipts .receipt:nth-child(1) { transform: rotate(-0.6deg); }
+  .receipts .receipt:nth-child(2) { transform: rotate(0.5deg); }
+  .receipts .receipt:nth-child(3) { transform: rotate(-0.4deg); }
   @media (max-width: 480px) { .receipt { transform: none !important; } }
 
   .receipt::after {
@@ -121,6 +141,13 @@
   .total-amt { font-size: 18px; font-weight: 700; }
   .chev { transition: transform 220ms ease; flex-shrink: 0; opacity: 0.75; margin-top: 2px; }
   .chev.open { transform: rotate(180deg); }
+
+  .start-btn {
+    background: none; border: 1px solid var(--ink); color: var(--ink); font-family: inherit;
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.2px; text-transform: uppercase;
+    padding: 5px 11px; border-radius: 4px; cursor: pointer; margin-top: 10px;
+  }
+  .start-btn:hover { background: var(--ink); color: var(--receipt); }
 
   .acc-body { overflow: hidden; display: grid; grid-template-rows: 0fr; transition: grid-template-rows 300ms ease; margin-top: 0; }
   .acc-body.open { grid-template-rows: 1fr; margin-top: 18px; }
@@ -159,6 +186,36 @@
   .footnote { font-size: 12.5px; color: var(--ink-faint); margin-top: 30px; line-height: 1.55; padding: 0 8px; text-align: center; }
   .loading, .empty-msg { color: var(--ink-soft); font-size: 14px; padding: 48px 0; text-align: center; }
 
+  /* ---- Shopping-mode checklist rows ---- */
+  .shop-group-head { margin-bottom: 4px; }
+  .shop-group-store { font-weight: 700; font-size: 14px; }
+  .shop-group-progress { font-size: 12px; color: var(--ink-faint); margin-top: 2px; }
+  .shop-row {
+    width: 100%; background: none; border: none; padding: 12px 0; margin: 0; cursor: pointer;
+    text-align: left; font: inherit; color: inherit; display: flex; align-items: center;
+    gap: 12px; border-bottom: 1px dashed var(--rule);
+  }
+  .shop-group:last-child .shop-row:last-child { border-bottom: none; }
+  .check-box { width: 20px; height: 20px; flex-shrink: 0; }
+  .shop-row .name { flex: 1; font-size: 14.5px; min-width: 0; }
+  .shop-row .price { font-size: 14px; font-weight: 500; flex-shrink: 0; }
+  .shop-row.checked .name { color: var(--ink-faint); text-decoration: line-through; }
+  .shop-row.checked .price { color: var(--ink-faint); }
+  .shop-group { margin-bottom: 22px; }
+  .shop-group:last-child { margin-bottom: 0; }
+
+  /* ---- Trip summary ---- */
+  .summary-row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px dashed var(--rule); font-size: 14px; }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-row .label { color: var(--ink-soft); }
+  .summary-row .val { font-weight: 600; }
+  .done-btn {
+    background: var(--ink); color: var(--receipt); border: none; border-radius: 5px;
+    padding: 10px 18px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer;
+    margin-top: 18px; width: 100%;
+  }
+  .done-btn:hover { opacity: 0.9; }
+
   @media (prefers-reduced-motion: reduce) { .acc-body, .chev { transition: none !important; } }
   @media (max-width: 400px) { h1 { font-size: 25px; } .store-name { font-size: 17px; } .total-amt { font-size: 16px; } }
 </style>
@@ -183,17 +240,22 @@
       <div id="listpad-body"></div>
     </div>
 
+    <div id="session-bar-slot"></div>
     <div class="receipts" id="cards"><div class="loading">Loading today's prices…</div></div>
   </div>
 
   <script>
     const PIN_SVG = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#22201A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>';
     const CHEV_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B8570" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>';
-    const STORAGE_KEY = 'grocery-list-selections-v1';
+    const BOX_EMPTY_SVG = '<svg class="check-box" viewBox="0 0 24 24" fill="none" stroke="#5B5646" stroke-width="1.6"><rect x="3.5" y="3.5" width="17" height="17" rx="3"></rect></svg>';
+    const BOX_CHECKED_SVG = '<svg class="check-box" viewBox="0 0 24 24" fill="none" stroke="#B23A2E" stroke-width="1.6"><rect x="3.5" y="3.5" width="17" height="17" rx="3" fill="#B23A2E"></rect><path d="M7 12.5l3 3 7-7" stroke="#FBF8F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
+
+    const SEL_KEY = 'grocery-list-selections-v1';
+    const SESSION_KEY = 'grocery-shopping-session-v1';
+    const SUMMARY_KEY = 'grocery-shopping-summary-v1';
 
     const fmt = (n) => '$' + n.toFixed(2);
 
-    // ---- Halal filtering ----
     function applyHalalFilter(items, storeCfg) {
       const halalExcluded = new Set();
       for (const item of items) {
@@ -209,25 +271,23 @@
       return halalExcluded;
     }
 
-    // ---- Selections (which items are on your list, and how many) ----
     function loadSelections(itemsMeta) {
       let saved = null;
-      try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch (e) { saved = null; }
+      try { saved = JSON.parse(localStorage.getItem(SEL_KEY) || 'null'); } catch (e) { saved = null; }
       const sel = {};
       for (const item of itemsMeta) {
         const s = saved && saved[item.name];
-        sel[item.name] = {
-          included: s ? !!s.included : true,
-          qty: s && s.qty != null ? s.qty : (item.qty || 1),
-        };
+        sel[item.name] = { included: s ? !!s.included : true, qty: s && s.qty != null ? s.qty : (item.qty || 1) };
       }
       return sel;
     }
-    function saveSelections(sel) {
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(sel)); } catch (e) { /* ignore */ }
-    }
+    function saveSelections(sel) { try { localStorage.setItem(SEL_KEY, JSON.stringify(sel)); } catch (e) {} }
 
-    // ---- One-stop totals ----
+    function loadSession() { try { return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch (e) { return null; } }
+    function saveSession(s) { try { s ? localStorage.setItem(SESSION_KEY, JSON.stringify(s)) : localStorage.removeItem(SESSION_KEY); } catch (e) {} }
+    function loadSummary() { try { return JSON.parse(localStorage.getItem(SUMMARY_KEY) || 'null'); } catch (e) { return null; } }
+    function saveSummary(s) { try { s ? localStorage.setItem(SUMMARY_KEY, JSON.stringify(s)) : localStorage.removeItem(SUMMARY_KEY); } catch (e) {} }
+
     function computeStoreTotal(items, store) {
       let total = 0, missing = 0;
       for (const item of items) {
@@ -237,7 +297,6 @@
       return { total, missing };
     }
 
-    // ---- Trip-worthy mix and match ----
     function computeMixAndMatch(items, stores, storeCfg, tierDefaults, homeStore) {
       const perItem = items.map((item) => {
         let bestStore = null, bestWeighted = Infinity;
@@ -268,11 +327,8 @@
         const tier = tierDefaults[cfg.tier];
         const threshold = tier ? tier.threshold : Infinity;
         const storeSavings = rows.reduce((s, r) => s + r.savings, 0);
-        if (storeSavings >= threshold) {
-          qualified[store] = { threshold, storeSavings, tierLabel: tier.label };
-        } else {
-          almost.push({ store, storeSavings, threshold });
-        }
+        if (storeSavings >= threshold) qualified[store] = { threshold, storeSavings, tierLabel: tier.label };
+        else almost.push({ store, storeSavings, threshold });
       }
 
       const finalAssign = {};
@@ -297,22 +353,19 @@
     function itemRowHtml(name, qty, unitPrice, lineTotal, dim, naLabel) {
       const displayName = qty > 1 ? (name + ' ×' + qty) : name;
       let priceHtml;
-      if (unitPrice == null) {
-        priceHtml = '<span class="price na num">' + (naLabel || 'not carried') + '</span>';
-      } else if (qty > 1) {
-        priceHtml = '<span class="price num">' + fmt(lineTotal) + '<span class="unit-hint">' + fmt(unitPrice) + ' ea</span></span>';
-      } else {
-        priceHtml = '<span class="price num">' + fmt(lineTotal) + '</span>';
-      }
+      if (unitPrice == null) priceHtml = '<span class="price na num">' + (naLabel || 'not carried') + '</span>';
+      else if (qty > 1) priceHtml = '<span class="price num">' + fmt(lineTotal) + '<span class="unit-hint">' + fmt(unitPrice) + ' ea</span></span>';
+      else priceHtml = '<span class="price num">' + fmt(lineTotal) + '</span>';
       return '<div class="item-row' + (dim ? ' dim' : '') + '"><span class="name">' + displayName + '</span>' + priceHtml + '</div>';
     }
 
-    function receiptHtml(id, storeLabel, subtitle, total, stampText, bodyHtml, expanded, receiptNo) {
+    function receiptHtml(id, storeLabel, subtitle, total, stampText, bodyHtml, expanded, receiptNo, startBtn) {
       const stampHtml = stampText ? '<div class="stamp">' + stampText + '</div>' : '';
+      const startHtml = startBtn ? '<button type="button" class="start-btn" data-start="' + id + '">Start shopping</button>' : '';
       return (
         '<div class="receipt" data-id="' + id + '">' + stampHtml +
           '<button class="receipt-head" data-toggle="' + id + '" aria-expanded="' + (expanded ? 'true' : 'false') + '">' +
-            '<div class="head-left"><div class="store-name">' + storeLabel + '</div><div class="store-sub">' + subtitle + '</div></div>' +
+            '<div class="head-left"><div class="store-name">' + storeLabel + '</div><div class="store-sub">' + subtitle + '</div>' + startHtml + '</div>' +
             '<div class="head-right"><div class="total-block"><span class="total-label">Total</span><span class="total-amt num">' + fmt(total) + '</span></div>' +
               '<span class="chev' + (expanded ? ' open' : '') + '" data-chev="' + id + '">' + CHEV_SVG + '</span></div>' +
           '</button>' +
@@ -329,88 +382,30 @@
       return 'prices checked ' + d.toLocaleDateString('en-CA', { weekday: 'short', month: 'short', day: 'numeric' });
     }
 
+    function formatElapsed(ms) {
+      const mins = Math.round(ms / 60000);
+      if (mins < 1) return 'just started';
+      if (mins === 1) return '1 min';
+      if (mins < 60) return mins + ' min';
+      const h = Math.floor(mins / 60), m = mins % 60;
+      return h + 'h ' + m + 'm';
+    }
+
     let itemsMeta = [], stores = [], generatedAt = null, storeCfg = {}, tierDefaults = {}, homeStore = 'Superstore', halalExcluded = new Set();
     let selections = {};
+    let session = null;
+    let summary = null;
 
-    function renderListpad() {
-      const rows = itemsMeta.map((item) => {
-        const s = selections[item.name];
-        return (
-          '<div class="list-row">' +
-            '<label class="list-check">' +
-              '<input type="checkbox" data-check="' + item.name + '" ' + (s.included ? 'checked' : '') + ' />' +
-              '<span class="list-name' + (s.included ? '' : ' off') + '">' + item.name + '</span>' +
-            '</label>' +
-            '<span class="qty-stepper">' +
-              '<button type="button" class="qty-btn" data-dec="' + item.name + '" aria-label="Decrease quantity">−</button>' +
-              '<input type="number" class="qty-input num" min="0" inputmode="numeric" value="' + s.qty + '" data-qty="' + item.name + '" aria-label="Quantity" />' +
-              '<button type="button" class="qty-btn" data-inc="' + item.name + '" aria-label="Increase quantity">+</button>' +
-            '</span>' +
-          '</div>'
-        );
-      }).join('');
-      document.getElementById('listpad-body').innerHTML = rows;
-      const count = itemsMeta.filter((i) => selections[i.name].included && selections[i.name].qty > 0).length;
-      document.getElementById('listpad-count').textContent = count + ' of ' + itemsMeta.length + ' items selected';
-
-      document.querySelectorAll('[data-check]').forEach((el) => {
-        el.addEventListener('change', () => {
-          const name = el.getAttribute('data-check');
-          selections[name].included = el.checked;
-          if (el.checked && selections[name].qty === 0) selections[name].qty = 1;
-          onSelectionsChanged();
-        });
-      });
-      document.querySelectorAll('[data-qty]').forEach((el) => {
-        el.addEventListener('change', () => {
-          const name = el.getAttribute('data-qty');
-          let v = parseInt(el.value, 10);
-          if (isNaN(v) || v < 0) v = 0;
-          selections[name].qty = v;
-          if (v === 0) selections[name].included = false;
-          onSelectionsChanged();
-        });
-      });
-      document.querySelectorAll('[data-inc]').forEach((el) => {
-        el.addEventListener('click', () => bump(el.getAttribute('data-inc'), 1));
-      });
-      document.querySelectorAll('[data-dec]').forEach((el) => {
-        el.addEventListener('click', () => bump(el.getAttribute('data-dec'), -1));
-      });
-    }
-
-    function bump(name, delta) {
-      const s = selections[name];
-      s.qty = Math.max(0, (s.qty || 0) + delta);
-      s.included = s.qty > 0;
-      onSelectionsChanged();
-    }
-
-    function onSelectionsChanged() {
-      saveSelections(selections);
-      renderListpad();
-      renderReceipts();
-    }
-
-    function renderReceipts() {
-      const activeItems = itemsMeta
+    function getActiveItems() {
+      return itemsMeta
         .filter((i) => selections[i.name].included && selections[i.name].qty > 0)
         .map((i) => ({ ...i, qty: selections[i.name].qty }));
+    }
 
-      const cardsEl = document.getElementById('cards');
-      const existingFoot = document.querySelector('.footnote');
-      if (existingFoot) existingFoot.remove();
+    function naLabelFor(name, store) { return halalExcluded.has(name + '||' + store) ? 'no halal option' : 'not carried'; }
 
-      document.getElementById('meta-line').textContent =
-        activeItems.length + ' of ' + itemsMeta.length + ' items on the list, ' + formatUpdated(generatedAt) + '.';
-
-      if (activeItems.length === 0) {
-        cardsEl.innerHTML = '<div class="empty-msg">Nothing selected yet — check off items above to see totals.</div>';
-        return;
-      }
-
-      const naLabelFor = (name, store) => halalExcluded.has(name + '||' + store) ? 'no halal option' : 'not carried';
-
+    // Builds all three plans in one shared shape: { label, subtitle, groups, total, stampText, receiptNo }
+    function buildPlans(activeItems) {
       const home = computeStoreTotal(activeItems, homeStore);
       const candidates = stores.filter((s) => s !== homeStore).map((s) => ({ store: s, ...computeStoreTotal(activeItems, s) }));
       const complete = candidates.filter((c) => c.missing === 0).sort((a, b) => a.total - b.total);
@@ -422,38 +417,74 @@
       const pctSingle = home.total ? Math.round((savingsSingle / home.total) * 100) : 0;
       const pctMix = home.total ? Math.round((savingsMix / home.total) * 100) : 0;
 
-      const homeBody = activeItems.map((i) => itemRowHtml(i.name, i.qty, i.prices[homeStore], (i.prices[homeStore] || 0) * i.qty, false, naLabelFor(i.name, homeStore))).join('');
-      const cheapestBody = activeItems.map((i) => itemRowHtml(i.name, i.qty, i.prices[cheapestSingle.store], (i.prices[cheapestSingle.store] || 0) * i.qty, false, naLabelFor(i.name, cheapestSingle.store))).join('');
+      const homeRows = activeItems.map((i) => ({ name: i.name, qty: i.qty, unit: i.prices[homeStore], lineTotal: (i.prices[homeStore] || 0) * i.qty }));
+      const cheapRows = activeItems.map((i) => ({ name: i.name, qty: i.qty, unit: i.prices[cheapestSingle.store], lineTotal: (i.prices[cheapestSingle.store] || 0) * i.qty }));
 
-      const mixBody = mix.groups.map((g) => {
-        const rowsHtml = g.rows.map((r) => itemRowHtml(r.name, r.qty, r.unit, r.lineTotal, true)).join('');
-        const justifyHtml = g.justify
-          ? '<div class="group-justify">saved ' + fmt(g.justify.storeSavings) + ' — clears the ' + fmt(g.justify.threshold) + ' needed for a ' + g.justify.tierLabel.toLowerCase() + '</div>'
-          : '';
-        return (
-          '<div class="group">' +
-            '<div class="group-head">' +
-              '<div class="group-head-left">' +
-                '<div class="group-head-top">' + PIN_SVG + '<span class="group-store">' + g.store + (g.isHome ? ' (your regular stop)' : '') + '</span></div>' +
-                '<span class="group-count">' + g.rows.length + ' item' + (g.rows.length > 1 ? 's' : '') + '</span>' +
-                justifyHtml +
-              '</div>' +
-              '<span class="group-subtotal num">' + fmt(g.subtotal) + '</span>' +
-            '</div>' + rowsHtml +
-          '</div>'
-        );
-      }).join('') + '<div class="grand-total"><span>Grand total</span><span class="num">' + fmt(mix.total) + '</span></div>';
+      return {
+        home: {
+          label: homeStore, subtitle: 'All ' + activeItems.length + ' items in one trip', total: home.total, stampText: null,
+          groups: [{ store: homeStore, isHome: true, rows: homeRows, subtotal: home.total, justify: null }], receiptNo: '001',
+        },
+        cheapest: {
+          label: cheapestSingle.store, subtitle: 'All ' + activeItems.length + ' items, lowest single-store total', total: cheapestSingle.total,
+          stampText: savingsSingle > 0 ? ('Save ' + fmt(savingsSingle) + ' (' + pctSingle + '%)') : null,
+          groups: [{ store: cheapestSingle.store, isHome: false, rows: cheapRows, subtotal: cheapestSingle.total, justify: null }], receiptNo: '002',
+        },
+        mix: {
+          label: 'Worth-the-drive split', subtitle: mix.storeCount + ' stop' + (mix.storeCount > 1 ? 's' : '') + ' — only detours that pay for themselves',
+          total: mix.total, stampText: savingsMix > 0 ? ('Save ' + fmt(savingsMix) + ' (' + pctMix + '%)') : null,
+          groups: mix.groups, receiptNo: '003', almost: mix.almost,
+        },
+      };
+    }
 
+    // ---------------- Rendering ----------------
+
+    function render() {
+      const listpadEl = document.getElementById('listpad');
+      const sessionSlot = document.getElementById('session-bar-slot');
+      const cardsEl = document.getElementById('cards');
+      const existingFoot = document.querySelector('.footnote');
+      if (existingFoot) existingFoot.remove();
+
+      if (summary) {
+        listpadEl.style.display = 'none';
+        sessionSlot.innerHTML = '';
+        renderSummary(cardsEl);
+        return;
+      }
+
+      const activeItems = getActiveItems();
+      document.getElementById('meta-line').textContent =
+        activeItems.length + ' of ' + itemsMeta.length + ' items on the list, ' + formatUpdated(generatedAt) + '.';
+
+      if (session) {
+        listpadEl.style.display = 'none';
+        renderSessionBar(sessionSlot, activeItems);
+        renderShoppingCard(cardsEl, activeItems);
+        return;
+      }
+
+      sessionSlot.innerHTML = '';
+      listpadEl.style.display = '';
+      renderListpad();
+
+      if (activeItems.length === 0) {
+        cardsEl.innerHTML = '<div class="empty-msg">Nothing selected yet — check off items above to see totals.</div>';
+        return;
+      }
+
+      const plans = buildPlans(activeItems);
       const html =
-        receiptHtml(homeStore.toLowerCase(), homeStore, 'All ' + activeItems.length + ' items in one trip', home.total, null, homeBody, false, '001') +
-        receiptHtml('cheapest', cheapestSingle.store, 'All ' + activeItems.length + ' items, lowest single-store total', cheapestSingle.total, savingsSingle > 0 ? ('Save ' + fmt(savingsSingle) + ' (' + pctSingle + '%)') : null, cheapestBody, false, '002') +
-        receiptHtml('mix', 'Worth-the-drive split', mix.storeCount + ' stop' + (mix.storeCount > 1 ? 's' : '') + ' — only detours that pay for themselves', mix.total, savingsMix > 0 ? ('Save ' + fmt(savingsMix) + ' (' + pctMix + '%)') : null, mixBody, true, '003');
+        receiptHtml('home', plans.home.label, plans.home.subtitle, plans.home.total, plans.home.stampText, plans.home.groups[0].rows.map((r) => itemRowHtml(r.name, r.qty, r.unit, r.lineTotal, false, naLabelFor(r.name, homeStore))).join(''), false, plans.home.receiptNo, true) +
+        receiptHtml('cheapest', plans.cheapest.label, plans.cheapest.subtitle, plans.cheapest.total, plans.cheapest.stampText, plans.cheapest.groups[0].rows.map((r) => itemRowHtml(r.name, r.qty, r.unit, r.lineTotal, false, naLabelFor(r.name, plans.cheapest.label))).join(''), false, plans.cheapest.receiptNo, true) +
+        receiptHtml('mix', plans.mix.label, plans.mix.subtitle, plans.mix.total, plans.mix.stampText, renderMixBody(plans.mix), true, plans.mix.receiptNo, true);
 
       cardsEl.innerHTML = html;
 
       let footnote = 'Only stores whose total basket savings clear their distance threshold get a special trip — everything else just rides along at ' + homeStore + '.';
-      if (mix.almost.length) {
-        const a = mix.almost.sort((x, y) => (y.storeSavings - y.threshold) - (x.storeSavings - x.threshold))[0];
+      if (plans.mix.almost.length) {
+        const a = plans.mix.almost.sort((x, y) => (y.storeSavings - y.threshold) - (x.storeSavings - x.threshold))[0];
         footnote += ' ' + a.store + ' came close — ' + fmt(a.storeSavings) + ' saved, ' + fmt(a.threshold) + ' needed.';
       }
       cardsEl.insertAdjacentHTML('afterend', '<p class="footnote">' + footnote + '</p>');
@@ -462,13 +493,32 @@
         btn.addEventListener('click', () => {
           const id = btn.getAttribute('data-toggle');
           const body = document.querySelector('[data-body="' + id + '"]');
-          const isOpen = body.classList.contains('open');
-          toggle(id, !isOpen);
+          toggleAcc(id, !body.classList.contains('open'));
+        });
+      });
+      document.querySelectorAll('[data-start]').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          startSession(btn.getAttribute('data-start'));
         });
       });
     }
 
-    function toggle(id, open) {
+    function renderMixBody(mixPlan) {
+      return mixPlan.groups.map((g) => {
+        const rowsHtml = g.rows.map((r) => itemRowHtml(r.name, r.qty, r.unit, r.lineTotal, true)).join('');
+        const justifyHtml = g.justify
+          ? '<div class="group-justify">saved ' + fmt(g.justify.storeSavings) + ' — clears the ' + fmt(g.justify.threshold) + ' needed for a ' + g.justify.tierLabel.toLowerCase() + '</div>' : '';
+        return (
+          '<div class="group"><div class="group-head"><div class="group-head-left">' +
+            '<div class="group-head-top">' + PIN_SVG + '<span class="group-store">' + g.store + (g.isHome ? ' (your regular stop)' : '') + '</span></div>' +
+            '<span class="group-count">' + g.rows.length + ' item' + (g.rows.length > 1 ? 's' : '') + '</span>' + justifyHtml +
+          '</div><span class="group-subtotal num">' + fmt(g.subtotal) + '</span></div>' + rowsHtml + '</div>'
+        );
+      }).join('') + '<div class="grand-total"><span>Grand total</span><span class="num">' + fmt(mixPlan.total) + '</span></div>';
+    }
+
+    function toggleAcc(id, open) {
       const body = document.querySelector('[data-body="' + id + '"]');
       const chev = document.querySelector('[data-chev="' + id + '"]');
       const btn = document.querySelector('[data-toggle="' + id + '"]');
@@ -477,6 +527,156 @@
       if (chev) chev.classList.toggle('open', open);
       if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     }
+
+    function renderListpad() {
+      const rows = itemsMeta.map((item) => {
+        const s = selections[item.name];
+        return (
+          '<div class="list-row"><label class="list-check">' +
+            '<input type="checkbox" data-check="' + item.name + '" ' + (s.included ? 'checked' : '') + ' />' +
+            '<span class="list-name' + (s.included ? '' : ' off') + '">' + item.name + '</span></label>' +
+            '<span class="qty-stepper">' +
+              '<button type="button" class="qty-btn" data-dec="' + item.name + '" aria-label="Decrease quantity">−</button>' +
+              '<input type="number" class="qty-input num" min="0" inputmode="numeric" value="' + s.qty + '" data-qty="' + item.name + '" aria-label="Quantity" />' +
+              '<button type="button" class="qty-btn" data-inc="' + item.name + '" aria-label="Increase quantity">+</button>' +
+            '</span></div>'
+        );
+      }).join('');
+      document.getElementById('listpad-body').innerHTML = rows;
+      const count = itemsMeta.filter((i) => selections[i.name].included && selections[i.name].qty > 0).length;
+      document.getElementById('listpad-count').textContent = count + ' of ' + itemsMeta.length + ' items selected';
+
+      document.querySelectorAll('[data-check]').forEach((el) => el.addEventListener('change', () => {
+        const name = el.getAttribute('data-check');
+        selections[name].included = el.checked;
+        if (el.checked && selections[name].qty === 0) selections[name].qty = 1;
+        saveSelections(selections); render();
+      }));
+      document.querySelectorAll('[data-qty]').forEach((el) => el.addEventListener('change', () => {
+        const name = el.getAttribute('data-qty');
+        let v = parseInt(el.value, 10);
+        if (isNaN(v) || v < 0) v = 0;
+        selections[name].qty = v;
+        if (v === 0) selections[name].included = false;
+        saveSelections(selections); render();
+      }));
+      document.querySelectorAll('[data-inc]').forEach((el) => el.addEventListener('click', () => bump(el.getAttribute('data-inc'), 1)));
+      document.querySelectorAll('[data-dec]').forEach((el) => el.addEventListener('click', () => bump(el.getAttribute('data-dec'), -1)));
+    }
+
+    function bump(name, delta) {
+      const s = selections[name];
+      s.qty = Math.max(0, (s.qty || 0) + delta);
+      s.included = s.qty > 0;
+      saveSelections(selections); render();
+    }
+
+    // ---------------- Shopping session ----------------
+
+    function startSession(planId) {
+      session = { planId, startedAt: Date.now(), checked: {} };
+      saveSession(session);
+      render();
+    }
+
+    function endSession() {
+      if (!session) return;
+      const activeItems = getActiveItems();
+      const plans = buildPlans(activeItems);
+      const plan = plans[session.planId];
+      const allRows = plan.groups.flatMap((g) => g.rows);
+      const collected = allRows.filter((r) => session.checked[r.name]).length;
+      const spent = allRows.filter((r) => session.checked[r.name]).reduce((s, r) => s + r.lineTotal, 0);
+
+      summary = {
+        planLabel: plan.label, totalItems: allRows.length, collected,
+        planned: plan.total, spent, elapsedMs: Date.now() - session.startedAt,
+      };
+      saveSummary(summary);
+      session = null;
+      saveSession(null);
+      render();
+    }
+
+    function renderSessionBar(slot, activeItems) {
+      const plans = buildPlans(activeItems);
+      const plan = plans[session.planId];
+      const allRows = plan.groups.flatMap((g) => g.rows);
+      const collected = allRows.filter((r) => session.checked[r.name]).length;
+      slot.innerHTML =
+        '<div class="session-bar"><div class="session-info">' +
+          '<div class="session-label">Now shopping</div>' +
+          '<div class="session-plan">' + plan.label + '</div>' +
+          '<div class="session-progress">' + collected + ' of ' + allRows.length + ' collected · started ' + formatElapsed(Date.now() - session.startedAt) + ' ago</div>' +
+        '</div><button type="button" class="end-btn" id="end-shopping-btn">End shopping</button></div>';
+      document.getElementById('end-shopping-btn').addEventListener('click', endSession);
+    }
+
+    function renderShoppingCard(cardsEl, activeItems) {
+      const plans = buildPlans(activeItems);
+      const plan = plans[session.planId];
+
+      const groupsHtml = plan.groups.map((g) => {
+        const groupCollected = g.rows.filter((r) => session.checked[r.name]).length;
+        const rowsHtml = g.rows.map((r) => {
+          const isChecked = !!session.checked[r.name];
+          const nameLabel = r.qty > 1 ? (r.name + ' ×' + r.qty) : r.name;
+          const priceLabel = r.unit == null ? (naLabelFor(r.name, g.store)) : fmt(r.lineTotal);
+          return (
+            '<button type="button" class="shop-row' + (isChecked ? ' checked' : '') + '" data-item="' + r.name + '">' +
+              (isChecked ? BOX_CHECKED_SVG : BOX_EMPTY_SVG) +
+              '<span class="name">' + nameLabel + '</span>' +
+              '<span class="price num">' + priceLabel + '</span>' +
+            '</button>'
+          );
+        }).join('');
+        return (
+          '<div class="shop-group"><div class="shop-group-head">' +
+            '<span class="shop-group-store">' + g.store + (g.isHome ? ' (your regular stop)' : '') + '</span>' +
+            '<div class="shop-group-progress">' + groupCollected + ' of ' + g.rows.length + ' collected · ' + fmt(g.subtotal) + '</div>' +
+          '</div>' + rowsHtml + '</div>'
+        );
+      }).join('');
+
+      cardsEl.innerHTML =
+        '<div class="receipt" style="transform:none;">' +
+          '<div class="head-left" style="margin-bottom:6px;"><div class="store-name">' + plan.label + '</div>' +
+          '<div class="store-sub">Tap an item as you drop it in the cart</div></div>' +
+          groupsHtml +
+          '<div class="barcode" aria-hidden="true"></div><div class="receipt-no">shopping now — good luck out there</div>' +
+        '</div>';
+
+      document.querySelectorAll('.shop-row').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const name = btn.getAttribute('data-item');
+          session.checked[name] = !session.checked[name];
+          saveSession(session);
+          render();
+        });
+      });
+    }
+
+    function renderSummary(cardsEl) {
+      const pct = summary.totalItems ? Math.round((summary.collected / summary.totalItems) * 100) : 0;
+      cardsEl.innerHTML =
+        '<div class="receipt" style="transform:none;">' +
+          '<div class="store-name">Trip complete</div>' +
+          '<div class="store-sub" style="margin-bottom:14px;">' + summary.planLabel + '</div>' +
+          '<div class="summary-row"><span class="label">Items collected</span><span class="val num">' + summary.collected + ' of ' + summary.totalItems + ' (' + pct + '%)</span></div>' +
+          '<div class="summary-row"><span class="label">Time shopping</span><span class="val">' + formatElapsed(summary.elapsedMs) + '</span></div>' +
+          '<div class="summary-row"><span class="label">Planned total</span><span class="val num">' + fmt(summary.planned) + '</span></div>' +
+          '<div class="summary-row"><span class="label">Actually spent</span><span class="val num">' + fmt(summary.spent) + '</span></div>' +
+          '<button type="button" class="done-btn" id="dismiss-summary-btn">Back to your plans</button>' +
+          '<div class="barcode" aria-hidden="true" style="margin-top:16px;"></div>' +
+        '</div>';
+      document.getElementById('dismiss-summary-btn').addEventListener('click', () => {
+        summary = null;
+        saveSummary(null);
+        render();
+      });
+    }
+
+    // ---------------- Init ----------------
 
     async function main() {
       try {
@@ -501,19 +701,19 @@
       homeStore = homeEntry ? homeEntry[0] : 'Superstore';
 
       selections = loadSelections(itemsMeta);
+      session = loadSession();
+      summary = session ? null : loadSummary();
 
-      document.getElementById('listpad').style.display = '';
       document.getElementById('select-all').addEventListener('click', () => {
         for (const item of itemsMeta) { selections[item.name].included = true; if (selections[item.name].qty === 0) selections[item.name].qty = item.qty || 1; }
-        onSelectionsChanged();
+        saveSelections(selections); render();
       });
       document.getElementById('clear-all').addEventListener('click', () => {
         for (const item of itemsMeta) selections[item.name].included = false;
-        onSelectionsChanged();
+        saveSelections(selections); render();
       });
 
-      renderListpad();
-      renderReceipts();
+      render();
     }
 
     main();
