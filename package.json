@@ -7,6 +7,7 @@
     "start": "node capture.js"
   },
   "dependencies": {
+    "@netlify/blobs": "^11.0.3",
     "playwright": "^1.47.0",
     "pngjs": "^7.0.0"
   }
