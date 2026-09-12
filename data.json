@@ -11,6 +11,7 @@
   "items": [
     {
       "name": "2% Milk, 4L",
+      "qty": 1,
       "prices": {
         "Food Basics": null,
         "FreshCo": 6.44,
@@ -23,6 +24,7 @@
     },
     {
       "name": "Butter, Salted, 454g",
+      "qty": 1,
       "prices": {
         "Food Basics": 5.99,
         "FreshCo": 5.99,
@@ -35,6 +37,7 @@
     },
     {
       "name": "Cheddar Cheese, Medium, 400g",
+      "qty": 1,
       "prices": {
         "Food Basics": 4.88,
         "FreshCo": 4.99,
@@ -47,6 +50,7 @@
     },
     {
       "name": "Cream Cheese, 250g",
+      "qty": 1,
       "prices": {
         "Food Basics": 3.99,
         "FreshCo": 2.99,
@@ -59,6 +63,7 @@
     },
     {
       "name": "Chicken Breast, Boneless Skinless, per kg",
+      "qty": 2,
       "prices": {
         "Food Basics": 10.98,
         "FreshCo": 13.5,
@@ -72,6 +77,7 @@
     },
     {
       "name": "Chicken Thighs, Bone-In, per kg",
+      "qty": 3,
       "prices": {
         "Food Basics": 9.9,
         "FreshCo": 7.5,
@@ -85,6 +91,7 @@
     },
     {
       "name": "White Bread, 675g",
+      "qty": 1,
       "prices": {
         "Food Basics": 2.48,
         "FreshCo": 2.48,
@@ -97,6 +104,7 @@
     },
     {
       "name": "Whole Wheat Bread, 675g",
+      "qty": 1,
       "prices": {
         "Food Basics": 2.48,
         "FreshCo": 2.48,
@@ -109,6 +117,7 @@
     },
     {
       "name": "Hamburger Buns, 8-pack",
+      "qty": 1,
       "prices": {
         "Food Basics": 7.99,
         "FreshCo": 2.99,
@@ -121,6 +130,7 @@
     },
     {
       "name": "Bananas, per kg",
+      "qty": 2,
       "prices": {
         "Food Basics": 1.52,
         "FreshCo": 1.52,
@@ -133,6 +143,7 @@
     },
     {
       "name": "Apples, ~2kg Bag",
+      "qty": 1,
       "prices": {
         "Food Basics": 4.99,
         "FreshCo": 4.99,
@@ -145,6 +156,7 @@
     },
     {
       "name": "Strawberries, 454g",
+      "qty": 1,
       "prices": {
         "Food Basics": 4.99,
         "FreshCo": 4.99,
@@ -157,6 +169,7 @@
     },
     {
       "name": "Oranges, per kg",
+      "qty": 2,
       "prices": {
         "Food Basics": 4.39,
         "FreshCo": 3.06,
@@ -169,6 +182,7 @@
     },
     {
       "name": "Potatoes, 10lb Bag",
+      "qty": 1,
       "prices": {
         "Food Basics": 5.98,
         "FreshCo": 6.99,
@@ -181,6 +195,7 @@
     },
     {
       "name": "Onions, 3lb Bag",
+      "qty": 1,
       "prices": {
         "Food Basics": 1.99,
         "FreshCo": 1.79,
@@ -193,6 +208,7 @@
     },
     {
       "name": "Carrots, 2lb Bag",
+      "qty": 1,
       "prices": {
         "Food Basics": 3.49,
         "FreshCo": 2.49,
@@ -205,6 +221,7 @@
     },
     {
       "name": "Broccoli, per Head or Crown",
+      "qty": 2,
       "prices": {
         "Food Basics": 2.5,
         "FreshCo": 3.9,
@@ -217,6 +234,7 @@
     },
     {
       "name": "Tomatoes, per kg",
+      "qty": 2,
       "prices": {
         "Food Basics": 5.49,
         "FreshCo": 6.55,
@@ -229,6 +247,7 @@
     },
     {
       "name": "Romaine Lettuce, per Head",
+      "qty": 2,
       "prices": {
         "Food Basics": 2.99,
         "FreshCo": 2.47,
@@ -241,6 +260,7 @@
     },
     {
       "name": "Blueberries, Fresh 454g (1lb)",
+      "qty": 1,
       "prices": {
         "Food Basics": 4.99,
         "FreshCo": 4.99,
