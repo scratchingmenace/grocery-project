@@ -36,10 +36,6 @@
   h1 { font-weight: 700; font-size: 30px; line-height: 1.15; margin: 0; letter-spacing: -0.2px; }
   .lede { color: var(--ink-soft); font-size: 15px; margin: 12px auto 0; line-height: 1.55; max-width: 38ch; }
 
-  .back-row { margin-bottom: 18px; }
-  .back-btn { background: none; border: none; font: inherit; font-size: 13px; color: var(--ink-faint); cursor: pointer; padding: 0; text-decoration: underline; }
-  .back-btn:hover { color: var(--stamp); }
-
   /* ---- Home screen ---- */
   .cta-btn {
     display: block; width: 100%; background: var(--stamp); color: var(--receipt); border: none;
@@ -53,6 +49,19 @@
   }
   .recap-title { font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 6px; }
   .recap-line { display: flex; justify-content: space-between; padding: 3px 0; }
+
+  /* ---- Persistent session bar (visible for the whole session, any sub-mode) ---- */
+  .session-bar {
+    background: var(--ink); color: var(--receipt); border-radius: 6px; padding: 14px 16px; margin-bottom: 26px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    position: sticky; top: 10px; z-index: 5;
+  }
+  .session-info { min-width: 0; }
+  .session-label { font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: #C9C2AC; }
+  .session-plan { font-weight: 700; font-size: 15px; margin-top: 2px; }
+  .session-progress { font-size: 12.5px; color: #C9C2AC; margin-top: 3px; }
+  .end-btn { background: var(--stamp); color: var(--receipt); border: none; border-radius: 5px; padding: 9px 16px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; flex-shrink: 0; }
+  .end-btn:hover { opacity: 0.9; }
 
   /* ---- Build-your-list notepad ---- */
   .listpad {
@@ -102,26 +111,12 @@
   .item-row { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px dashed var(--rule); font-size: 13px; }
   .item-row:last-child { border-bottom: none; }
   .item-row .name { color: var(--ink); }
-  .item-row.dim .name { color: var(--ink-soft); }
   .item-row .price { color: var(--ink); flex-shrink: 0; font-weight: 500; text-align: right; }
-  .item-row.dim .price { color: var(--ink-soft); }
   .item-row .price.na { color: var(--ink-faint); font-weight: 400; }
   .unit-hint { display: block; font-size: 10.5px; color: var(--ink-faint); font-weight: 400; margin-top: 1px; }
   .mini-group-store { font-weight: 700; font-size: 12.5px; margin: 10px 0 4px; }
   .mini-group-store:first-child { margin-top: 0; }
   .footnote { font-size: 12px; color: var(--ink-faint); margin-top: 20px; line-height: 1.55; text-align: center; }
-
-  /* ---- Session bar ---- */
-  .session-bar {
-    background: var(--ink); color: var(--receipt); border-radius: 6px; padding: 14px 16px; margin-bottom: 26px;
-    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
-  }
-  .session-info { min-width: 0; }
-  .session-label { font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: #C9C2AC; }
-  .session-plan { font-weight: 700; font-size: 15px; margin-top: 2px; }
-  .session-progress { font-size: 12.5px; color: #C9C2AC; margin-top: 3px; }
-  .end-btn { background: var(--stamp); color: var(--receipt); border: none; border-radius: 5px; padding: 9px 16px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; flex-shrink: 0; }
-  .end-btn:hover { opacity: 0.9; }
 
   /* ---- Receipt-styled shopping checklist + trip summary ---- */
   .receipt {
@@ -135,6 +130,8 @@
   }
   .store-name { font-weight: 700; font-size: 19px; text-transform: uppercase; letter-spacing: 0.4px; }
   .store-sub { font-size: 13px; color: var(--ink-soft); margin-top: 5px; line-height: 1.4; }
+  .change-plan-btn { background: none; border: none; font: inherit; font-size: 12px; color: var(--ink-faint); text-decoration: underline; cursor: pointer; padding: 0; margin-top: 8px; }
+  .change-plan-btn:hover { color: var(--stamp); }
 
   .shop-group-head { margin-bottom: 4px; }
   .shop-group-store { font-weight: 700; font-size: 14px; }
@@ -184,8 +181,9 @@
     const BOX_CHECKED_SVG = '<svg class="check-box" viewBox="0 0 24 24" fill="none" stroke="#B23A2E" stroke-width="1.6"><rect x="3.5" y="3.5" width="17" height="17" rx="3" fill="#B23A2E"></rect><path d="M7 12.5l3 3 7-7" stroke="#FBF8F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
 
     const SEL_KEY = 'grocery-list-selections-v1';
-    const SESSION_KEY = 'grocery-shopping-session-v1';
+    const SESSION_KEY = 'grocery-shopping-session-v2';
     const LAST_TRIP_KEY = 'grocery-last-trip-v1';
+    const JUST_FINISHED_KEY = 'grocery-just-finished-v1';
 
     const fmt = (n) => '$' + n.toFixed(2);
 
@@ -219,6 +217,8 @@
     function saveSession(s) { try { s ? localStorage.setItem(SESSION_KEY, JSON.stringify(s)) : localStorage.removeItem(SESSION_KEY); } catch (e) {} }
     function loadLastTrip() { try { return JSON.parse(localStorage.getItem(LAST_TRIP_KEY) || 'null'); } catch (e) { return null; } }
     function saveLastTrip(s) { try { s ? localStorage.setItem(LAST_TRIP_KEY, JSON.stringify(s)) : localStorage.removeItem(LAST_TRIP_KEY); } catch (e) {} }
+    function loadJustFinished() { try { return JSON.parse(localStorage.getItem(JUST_FINISHED_KEY) || 'null'); } catch (e) { return null; } }
+    function saveJustFinished(s) { try { s ? localStorage.setItem(JUST_FINISHED_KEY, JSON.stringify(s)) : localStorage.removeItem(JUST_FINISHED_KEY); } catch (e) {} }
 
     function computeStoreTotal(items, store) {
       let total = 0, missing = 0;
@@ -296,9 +296,7 @@
       const d = new Date(iso);
       return 'prices checked ' + d.toLocaleDateString('en-CA', { weekday: 'short', month: 'short', day: 'numeric' });
     }
-    function formatDate(ms) {
-      return new Date(ms).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' });
-    }
+    function formatDate(ms) { return new Date(ms).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' }); }
     function formatElapsed(ms) {
       const mins = Math.round(ms / 60000);
       if (mins < 1) return 'just started';
@@ -310,10 +308,9 @@
 
     let itemsMeta = [], stores = [], generatedAt = null, storeCfg = {}, tierDefaults = {}, homeStore = 'Superstore', halalExcluded = new Set();
     let selections = {};
-    let session = null;
-    let lastTrip = null;
-    let screen = 'home'; // 'home' | 'build' | 'shopping' | 'summary'
-    let justFinished = null; // trip object shown once on the summary screen
+    let session = null;      // { startedAt, planId: null|'home'|'cheapest'|'mix', checked: {} } — persists until End Shopping
+    let lastTrip = null;     // most recent completed trip, shown as a recap on Home
+    let justFinished = null; // trip just completed, shown once on the summary screen until dismissed
 
     function getActiveItems() {
       return itemsMeta
@@ -349,18 +346,24 @@
       };
     }
 
-    // ---------------- Top-level render dispatcher ----------------
+    // ---------------- Screen derivation ----------------
+    // The screen shown is always derived from persisted state, never from a
+    // raw "current screen" flag — so a refresh at any point lands you back
+    // exactly where you were.
+    function currentScreen() {
+      if (session) return 'session';
+      if (justFinished) return 'summary';
+      return 'home';
+    }
 
     function render() {
       const app = document.getElementById('app');
+      const screen = currentScreen();
       if (screen === 'home') app.innerHTML = homeHtml();
-      else if (screen === 'build') app.innerHTML = buildHtml();
-      else if (screen === 'shopping') app.innerHTML = shoppingHtml();
-      else if (screen === 'summary') app.innerHTML = summaryHtml();
+      else if (screen === 'session') app.innerHTML = sessionHtml();
+      else app.innerHTML = summaryHtml();
       attachHandlers();
     }
-
-    function goHome() { screen = 'home'; render(); }
 
     // ---------------- Home screen ----------------
 
@@ -373,18 +376,37 @@
       ) : '';
       return (
         '<div class="masthead"><h1>Where to buy your list</h1>' +
-        '<p class="lede">Build your list, see what it costs at Superstore, the cheapest single store, or a smart multi-stop split — then shop it in real time.</p></div>' +
+        '<p class="lede">Start shopping to build your list and see it priced at Superstore, the cheapest single store, and a smart multi-stop split — all in one session that stays open until you end it.</p></div>' +
         recap +
         '<button type="button" class="cta-btn" id="start-shopping-btn">Start shopping</button>'
       );
     }
 
-    // ---------------- Build-your-list screen ----------------
+    // ---------------- Session screen (build + pick plan + checklist, all one persisted session) ----------------
 
-    function buildHtml() {
+    function sessionHtml() {
       const activeItems = getActiveItems();
       const plans = activeItems.length ? buildPlans(activeItems) : null;
+      const plan = plans && session.planId ? plans[session.planId] : null;
 
+      let barProgress = 'started ' + formatElapsed(Date.now() - session.startedAt) + ' ago';
+      if (plan) {
+        const allRows = plan.groups.flatMap((g) => g.rows);
+        const collected = allRows.filter((r) => session.checked[r.name]).length;
+        barProgress = collected + ' of ' + allRows.length + ' collected · ' + barProgress;
+      }
+      const bar =
+        '<div class="session-bar"><div class="session-info">' +
+          '<div class="session-label">Shopping session</div>' +
+          '<div class="session-plan">' + (plan ? plan.label : 'Building your list') + '</div>' +
+          '<div class="session-progress">' + barProgress + '</div>' +
+        '</div><button type="button" class="end-btn" id="end-shopping-btn">End shopping</button></div>';
+
+      if (plan) return bar + checklistHtml(plan);
+      return bar + listBuilderHtml(activeItems, plans);
+    }
+
+    function listBuilderHtml(activeItems, plans) {
       const listRows = itemsMeta.map((item) => {
         const s = selections[item.name];
         return (
@@ -403,7 +425,7 @@
       let plansHtml = '<div class="empty-msg" style="padding:24px 0;">Check off items above to see your options.</div>';
       if (plans) {
         plansHtml =
-          '<div class="picker-label">Pick a plan once your list looks right</div><div class="plan-cards">' +
+          '<div class="picker-label">Pick a plan when your list looks right</div><div class="plan-cards">' +
           planCardHtml(plans.home) + planCardHtml(plans.cheapest) + planCardHtml(plans.mix) +
           '</div>';
         if (plans.mix.almost && plans.mix.almost.length) {
@@ -413,7 +435,6 @@
       }
 
       return (
-        '<div class="back-row"><button type="button" class="back-btn" id="back-home-btn">← back</button></div>' +
         '<div class="listpad">' +
           '<div class="listpad-head"><span class="listpad-title">Build your list</span>' +
             '<span class="listpad-actions"><button type="button" id="select-all">select all</button><button type="button" id="clear-all">clear all</button></span></div>' +
@@ -436,22 +457,14 @@
         '</div>' +
         '<div class="plan-card-actions">' +
           '<button type="button" class="see-items-btn" data-see="' + plan.id + '">see items</button>' +
-          '<button type="button" class="shop-btn" data-start="' + plan.id + '">Shop this plan</button>' +
+          '<button type="button" class="shop-btn" data-choose="' + plan.id + '">Shop this plan</button>' +
         '</div>' +
         '<div class="acc-body" data-body="' + plan.id + '"><div>' + rowsHtml + '</div></div>' +
         '</div>'
       );
     }
 
-    // ---------------- Shopping screen ----------------
-
-    function shoppingHtml() {
-      const activeItems = getActiveItems();
-      const plans = buildPlans(activeItems);
-      const plan = plans[session.planId];
-      const allRows = plan.groups.flatMap((g) => g.rows);
-      const collected = allRows.filter((r) => session.checked[r.name]).length;
-
+    function checklistHtml(plan) {
       const groupsHtml = plan.groups.map((g) => {
         const groupCollected = g.rows.filter((r) => session.checked[r.name]).length;
         const rowsHtml = g.rows.map((r) => {
@@ -474,12 +487,10 @@
       }).join('');
 
       return (
-        '<div class="session-bar"><div class="session-info">' +
-          '<div class="session-label">Now shopping</div><div class="session-plan">' + plan.label + '</div>' +
-          '<div class="session-progress">' + collected + ' of ' + allRows.length + ' collected · started ' + formatElapsed(Date.now() - session.startedAt) + ' ago</div>' +
-        '</div><button type="button" class="end-btn" id="end-shopping-btn">End shopping</button></div>' +
         '<div class="receipt"><div class="store-name">' + plan.label + '</div>' +
-        '<div class="store-sub">Tap an item as you drop it in the cart</div><div style="margin-top:14px;">' + groupsHtml + '</div>' +
+        '<div class="store-sub">Tap an item as you drop it in the cart</div>' +
+        '<button type="button" class="change-plan-btn" id="change-plan-btn">change plan / edit list</button>' +
+        '<div style="margin-top:14px;">' + groupsHtml + '</div>' +
         '<div class="barcode" aria-hidden="true"></div><div class="receipt-no">shopping now — good luck out there</div></div>'
       );
     }
@@ -506,8 +517,11 @@
     function attachHandlers() {
       const el = (id) => document.getElementById(id);
 
-      if (el('start-shopping-btn')) el('start-shopping-btn').addEventListener('click', () => { screen = 'build'; render(); });
-      if (el('back-home-btn')) el('back-home-btn').addEventListener('click', goHome);
+      if (el('start-shopping-btn')) el('start-shopping-btn').addEventListener('click', () => {
+        session = { startedAt: Date.now(), planId: null, checked: {} };
+        saveSession(session);
+        render();
+      });
 
       if (el('select-all')) el('select-all').addEventListener('click', () => {
         for (const item of itemsMeta) { selections[item.name].included = true; if (selections[item.name].qty === 0) selections[item.name].qty = item.qty || 1; }
@@ -540,10 +554,19 @@
         const body = document.querySelector('[data-body="' + id + '"]');
         body.classList.toggle('open');
       }));
-      document.querySelectorAll('[data-start]').forEach((btn) => btn.addEventListener('click', () => startSession(btn.getAttribute('data-start'))));
+      document.querySelectorAll('[data-choose]').forEach((btn) => btn.addEventListener('click', () => {
+        session.planId = btn.getAttribute('data-choose');
+        saveSession(session);
+        render();
+      }));
+      if (el('change-plan-btn')) el('change-plan-btn').addEventListener('click', () => {
+        session.planId = null;
+        saveSession(session);
+        render();
+      });
 
       if (el('end-shopping-btn')) el('end-shopping-btn').addEventListener('click', endSession);
-      if (el('done-btn')) el('done-btn').addEventListener('click', () => { justFinished = null; goHome(); });
+      if (el('done-btn')) el('done-btn').addEventListener('click', () => { justFinished = null; saveJustFinished(null); render(); });
 
       document.querySelectorAll('.shop-row').forEach((btn) => btn.addEventListener('click', () => {
         const name = btn.getAttribute('data-item');
@@ -560,15 +583,15 @@
       saveSelections(selections); render();
     }
 
-    function startSession(planId) {
-      session = { planId, startedAt: Date.now(), checked: {} };
-      saveSession(session);
-      screen = 'shopping';
-      render();
-    }
-
     function endSession() {
       if (!session) return;
+      if (!session.planId) {
+        // Never picked a plan to shop — nothing to summarize, just close the session.
+        session = null;
+        saveSession(null);
+        render();
+        return;
+      }
       const activeItems = getActiveItems();
       const plans = buildPlans(activeItems);
       const plan = plans[session.planId];
@@ -579,9 +602,9 @@
       justFinished = { planLabel: plan.label, totalItems: allRows.length, collected, planned: plan.total, spent, elapsedMs: Date.now() - session.startedAt, endedAt: Date.now() };
       lastTrip = justFinished;
       saveLastTrip(lastTrip);
+      saveJustFinished(justFinished);
       session = null;
       saveSession(null);
-      screen = 'summary';
       render();
     }
 
@@ -612,8 +635,8 @@
       selections = loadSelections(itemsMeta);
       session = loadSession();
       lastTrip = loadLastTrip();
+      justFinished = session ? null : loadJustFinished();
 
-      screen = session ? 'shopping' : 'home';
       render();
     }
 
