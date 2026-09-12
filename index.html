@@ -32,16 +32,53 @@
   :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
   .num { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
 
-  .masthead { text-align: center; margin-bottom: 40px; padding: 0 8px; }
-  h1 {
-    font-weight: 700;
-    font-size: 30px;
-    line-height: 1.15;
-    margin: 0;
-    letter-spacing: -0.2px;
-  }
+  .masthead { text-align: center; margin-bottom: 30px; padding: 0 8px; }
+  h1 { font-weight: 700; font-size: 30px; line-height: 1.15; margin: 0; letter-spacing: -0.2px; }
   .lede { color: var(--ink-soft); font-size: 15px; margin: 12px auto 0; line-height: 1.55; max-width: 38ch; }
   .scan-line { font-size: 13px; color: var(--ink-faint); margin-top: 16px; }
+
+  /* ---- Build-your-list notepad ---- */
+  .listpad {
+    background: var(--receipt);
+    border-left: 3px solid var(--stamp);
+    padding: 18px 18px 8px 22px;
+    margin-bottom: 34px;
+    box-shadow: 0 12px 22px -16px rgba(34,32,26,.35), 0 2px 5px rgba(34,32,26,.12);
+  }
+  .listpad-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+  .listpad-title { font-weight: 700; font-size: 15px; }
+  .listpad-actions { display: flex; gap: 10px; }
+  .listpad-actions button {
+    background: none; border: none; padding: 0; font: inherit; font-size: 12px;
+    color: var(--ink-faint); text-decoration: underline; cursor: pointer;
+  }
+  .listpad-actions button:hover { color: var(--stamp); }
+  .listpad-count { font-size: 12px; color: var(--ink-faint); margin-bottom: 10px; }
+
+  .list-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 8px 0; border-bottom: 1px dashed var(--rule);
+  }
+  .list-row:last-child { border-bottom: none; }
+  .list-check { display: flex; align-items: center; gap: 9px; min-width: 0; cursor: pointer; }
+  .list-check input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--stamp); flex-shrink: 0; cursor: pointer; }
+  .list-name { font-size: 13.5px; line-height: 1.3; }
+  .list-name.off { color: var(--ink-faint); text-decoration: line-through; }
+
+  .qty-stepper { display: flex; align-items: center; gap: 0; flex-shrink: 0; }
+  .qty-btn {
+    width: 24px; height: 24px; border: 1px solid var(--rule); background: var(--paper);
+    color: var(--ink); font-size: 15px; line-height: 1; cursor: pointer; font-family: inherit;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .qty-btn:first-child { border-radius: 4px 0 0 4px; }
+  .qty-btn:last-child { border-radius: 0 4px 4px 0; }
+  .qty-input {
+    width: 32px; height: 24px; border: 1px solid var(--rule); border-left: none; border-right: none;
+    text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--ink);
+    background: var(--receipt); -moz-appearance: textfield;
+  }
+  .qty-input::-webkit-outer-spin-button, .qty-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
   .receipts { display: flex; flex-direction: column; gap: 42px; }
 
@@ -54,35 +91,20 @@
   .receipt:nth-child(1) { transform: rotate(-0.6deg); }
   .receipt:nth-child(2) { transform: rotate(0.5deg); }
   .receipt:nth-child(3) { transform: rotate(-0.4deg); }
-  @media (max-width: 480px) {
-    .receipt { transform: none !important; }
-  }
+  @media (max-width: 480px) { .receipt { transform: none !important; } }
 
   .receipt::after {
     content: "";
-    position: absolute;
-    left: 0; right: 0; bottom: -7px;
-    height: 14px;
+    position: absolute; left: 0; right: 0; bottom: -7px; height: 14px;
     background-image: radial-gradient(circle, var(--paper) 3.4px, transparent 3.6px);
-    background-size: 14px 14px;
-    background-position: 0 center;
-    background-repeat: repeat-x;
+    background-size: 14px 14px; background-position: 0 center; background-repeat: repeat-x;
   }
 
   .stamp {
-    position: absolute;
-    top: -12px; right: 20px;
-    transform: rotate(-8deg);
-    border: 2px solid var(--stamp);
-    color: var(--stamp);
-    font-weight: 700;
-    font-size: 11px;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    padding: 4px 9px 3px;
-    border-radius: 3px;
-    background: var(--receipt);
-    z-index: 2;
+    position: absolute; top: -12px; right: 20px; transform: rotate(-8deg);
+    border: 2px solid var(--stamp); color: var(--stamp); font-weight: 700; font-size: 11px;
+    letter-spacing: 0.5px; text-transform: uppercase; padding: 4px 9px 3px; border-radius: 3px;
+    background: var(--receipt); z-index: 2;
   }
 
   .receipt-head {
@@ -104,10 +126,7 @@
   .acc-body.open { grid-template-rows: 1fr; margin-top: 18px; }
   .acc-body > div { min-height: 0; overflow: hidden; }
 
-  .item-row {
-    display: flex; justify-content: space-between; gap: 12px; padding: 7px 0;
-    border-bottom: 1px dashed var(--rule); font-size: 13.5px;
-  }
+  .item-row { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px dashed var(--rule); font-size: 13.5px; }
   .item-row:last-child { border-bottom: none; }
   .item-row .name { color: var(--ink); }
   .item-row.dim .name { color: var(--ink-soft); }
@@ -126,35 +145,22 @@
   .group { margin-bottom: 18px; }
   .group:last-child { margin-bottom: 0; }
 
-  .grand-total {
-    display: flex; justify-content: space-between; align-items: baseline;
-    border-top: 3px double var(--ink); padding-top: 10px; margin-top: 4px;
-    font-weight: 700; font-size: 15px;
-  }
+  .grand-total { display: flex; justify-content: space-between; align-items: baseline; border-top: 3px double var(--ink); padding-top: 10px; margin-top: 4px; font-weight: 700; font-size: 15px; }
 
   .barcode {
     height: 26px; margin: 16px 0 6px;
     background-image: repeating-linear-gradient(90deg,
-      var(--ink) 0 2px, transparent 2px 3px,
-      var(--ink) 3px 4px, transparent 4px 6px,
-      var(--ink) 6px 9px, transparent 9px 11px,
-      var(--ink) 11px 12px, transparent 12px 15px);
+      var(--ink) 0 2px, transparent 2px 3px, var(--ink) 3px 4px, transparent 4px 6px,
+      var(--ink) 6px 9px, transparent 9px 11px, var(--ink) 11px 12px, transparent 12px 15px);
     opacity: 0.75;
   }
   .receipt-no { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-faint); text-align: center; letter-spacing: 0.4px; }
 
   .footnote { font-size: 12.5px; color: var(--ink-faint); margin-top: 30px; line-height: 1.55; padding: 0 8px; text-align: center; }
-  .loading { color: var(--ink-soft); font-size: 14px; padding: 48px 0; text-align: center; }
+  .loading, .empty-msg { color: var(--ink-soft); font-size: 14px; padding: 48px 0; text-align: center; }
 
-  @media (prefers-reduced-motion: reduce) {
-    .acc-body, .chev { transition: none !important; }
-  }
-
-  @media (max-width: 400px) {
-    h1 { font-size: 25px; }
-    .store-name { font-size: 17px; }
-    .total-amt { font-size: 16px; }
-  }
+  @media (prefers-reduced-motion: reduce) { .acc-body, .chev { transition: none !important; } }
+  @media (max-width: 400px) { h1 { font-size: 25px; } .store-name { font-size: 17px; } .total-amt { font-size: 16px; } }
 </style>
 </head>
 <body>
@@ -164,20 +170,30 @@
       <p class="lede">Three ways to shop the same items — one stop at Superstore, one stop at the cheapest complete store, or detouring to a store only when the bulk savings are worth the drive.</p>
       <p class="scan-line" id="meta-line">Loading…</p>
     </div>
+
+    <div class="listpad" id="listpad" style="display:none;">
+      <div class="listpad-head">
+        <span class="listpad-title">Build your list</span>
+        <span class="listpad-actions">
+          <button type="button" id="select-all">select all</button>
+          <button type="button" id="clear-all">clear all</button>
+        </span>
+      </div>
+      <div class="listpad-count" id="listpad-count"></div>
+      <div id="listpad-body"></div>
+    </div>
+
     <div class="receipts" id="cards"><div class="loading">Loading today's prices…</div></div>
   </div>
 
   <script>
     const PIN_SVG = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#22201A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>';
     const CHEV_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B8570" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>';
+    const STORAGE_KEY = 'grocery-list-selections-v1';
 
     const fmt = (n) => '$' + n.toFixed(2);
 
     // ---- Halal filtering ----
-    // Mutates item.prices in place: any store that doesn't carry halal meat
-    // gets nulled out for items that require it, before any math happens.
-    // Returns a set of "item||store" keys that were nulled specifically for
-    // this reason, so the UI can say "no halal option" instead of "not carried".
     function applyHalalFilter(items, storeCfg) {
       const halalExcluded = new Set();
       for (const item of items) {
@@ -193,43 +209,49 @@
       return halalExcluded;
     }
 
-    // ---- One-stop totals (used for "Superstore" and "cheapest complete store") ----
-    // Weighted by qty: a $0.50/unit difference on an item you buy 3 of counts 3x.
-    function computeStoreTotal(items, stores, store) {
+    // ---- Selections (which items are on your list, and how many) ----
+    function loadSelections(itemsMeta) {
+      let saved = null;
+      try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch (e) { saved = null; }
+      const sel = {};
+      for (const item of itemsMeta) {
+        const s = saved && saved[item.name];
+        sel[item.name] = {
+          included: s ? !!s.included : true,
+          qty: s && s.qty != null ? s.qty : (item.qty || 1),
+        };
+      }
+      return sel;
+    }
+    function saveSelections(sel) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(sel)); } catch (e) { /* ignore */ }
+    }
+
+    // ---- One-stop totals ----
+    function computeStoreTotal(items, store) {
       let total = 0, missing = 0;
       for (const item of items) {
-        const qty = item.qty || 1;
         const p = item.prices[store];
-        if (p == null) missing += 1; else total += p * qty;
+        if (p == null) missing += 1; else total += p * item.qty;
       }
       return { total, missing };
     }
 
     // ---- Trip-worthy mix and match ----
-    // For each item, find its cheapest eligible store (weighted by qty).
-    // Group those "wants" by store, then only actually send you there if the
-    // store's TOTAL weighted savings vs. your home store clears that store's
-    // distance-tier threshold. Otherwise everything reverts to the home store,
-    // since you're going there anyway.
-    function computeMixAndMatch(items, stores, storeCfg, tierDefaults) {
-      const homeEntry = Object.entries(storeCfg).find(([, c]) => c.tier === 'home');
-      const homeStore = homeEntry ? homeEntry[0] : 'Superstore';
-
+    function computeMixAndMatch(items, stores, storeCfg, tierDefaults, homeStore) {
       const perItem = items.map((item) => {
-        const qty = item.qty || 1;
         let bestStore = null, bestWeighted = Infinity;
         for (const store of stores) {
           const p = item.prices[store];
           if (p == null) continue;
-          const w = p * qty;
+          const w = p * item.qty;
           if (w < bestWeighted) { bestWeighted = w; bestStore = store; }
         }
         const homeUnit = item.prices[homeStore];
-        const homeWeighted = homeUnit != null ? homeUnit * qty : null;
-        return { name: item.name, qty, bestStore, bestWeighted, homeWeighted };
+        const homeWeighted = homeUnit != null ? homeUnit * item.qty : null;
+        return { name: item.name, qty: item.qty, bestStore, bestWeighted, homeWeighted };
       });
 
-      // Group candidate savings by non-home store
       const byStore = {};
       for (const row of perItem) {
         if (!row.bestStore || row.bestStore === homeStore) continue;
@@ -239,7 +261,6 @@
         (byStore[row.bestStore] = byStore[row.bestStore] || []).push({ ...row, savings });
       }
 
-      // Apply each store's distance-tier threshold to its total basket savings
       const qualified = {};
       const almost = [];
       for (const [store, rows] of Object.entries(byStore)) {
@@ -250,34 +271,27 @@
         if (storeSavings >= threshold) {
           qualified[store] = { threshold, storeSavings, tierLabel: tier.label };
         } else {
-          almost.push({ store, storeSavings, threshold, tierLabel: tier ? tier.label : store });
+          almost.push({ store, storeSavings, threshold });
         }
       }
 
-      // Final assignment: qualifying-store items stay put, everything else -> home
       const finalAssign = {};
       for (const row of perItem) {
         let store = homeStore, weighted = row.homeWeighted;
-        if (row.bestStore && qualified[row.bestStore]) {
-          store = row.bestStore;
-          weighted = row.bestWeighted;
-        }
+        if (row.bestStore && qualified[row.bestStore]) { store = row.bestStore; weighted = row.bestWeighted; }
         if (weighted == null) { store = row.bestStore; weighted = row.bestWeighted; }
-        (finalAssign[store] = finalAssign[store] || []).push({
-          name: row.name, qty: row.qty, unit: weighted / row.qty, lineTotal: weighted,
-        });
+        (finalAssign[store] = finalAssign[store] || []).push({ name: row.name, qty: row.qty, unit: weighted / row.qty, lineTotal: weighted });
       }
 
       const groups = Object.entries(finalAssign).map(([store, rows]) => ({
-        store,
-        isHome: store === homeStore,
+        store, isHome: store === homeStore,
         rows: rows.sort((a, b) => b.lineTotal - a.lineTotal),
         subtotal: rows.reduce((s, r) => s + r.lineTotal, 0),
         justify: qualified[store] || null,
       })).sort((a, b) => (a.isHome ? 1 : 0) - (b.isHome ? 1 : 0) || b.subtotal - a.subtotal);
 
       const total = groups.reduce((s, g) => s + g.subtotal, 0);
-      return { groups, total, storeCount: groups.length, homeStore, almost };
+      return { groups, total, storeCount: groups.length, almost };
     }
 
     function itemRowHtml(name, qty, unitPrice, lineTotal, dim, naLabel) {
@@ -296,25 +310,14 @@
     function receiptHtml(id, storeLabel, subtitle, total, stampText, bodyHtml, expanded, receiptNo) {
       const stampHtml = stampText ? '<div class="stamp">' + stampText + '</div>' : '';
       return (
-        '<div class="receipt" data-id="' + id + '">' +
-          stampHtml +
+        '<div class="receipt" data-id="' + id + '">' + stampHtml +
           '<button class="receipt-head" data-toggle="' + id + '" aria-expanded="' + (expanded ? 'true' : 'false') + '">' +
-            '<div class="head-left">' +
-              '<div class="store-name">' + storeLabel + '</div>' +
-              '<div class="store-sub">' + subtitle + '</div>' +
-            '</div>' +
-            '<div class="head-right">' +
-              '<div class="total-block">' +
-                '<span class="total-label">Total</span>' +
-                '<span class="total-amt num">' + fmt(total) + '</span>' +
-              '</div>' +
-              '<span class="chev' + (expanded ? ' open' : '') + '" data-chev="' + id + '">' + CHEV_SVG + '</span>' +
-            '</div>' +
+            '<div class="head-left"><div class="store-name">' + storeLabel + '</div><div class="store-sub">' + subtitle + '</div></div>' +
+            '<div class="head-right"><div class="total-block"><span class="total-label">Total</span><span class="total-amt num">' + fmt(total) + '</span></div>' +
+              '<span class="chev' + (expanded ? ' open' : '') + '" data-chev="' + id + '">' + CHEV_SVG + '</span></div>' +
           '</button>' +
-          '<div class="acc-body' + (expanded ? ' open' : '') + '" data-body="' + id + '"><div>' +
-            bodyHtml +
-            '<div class="barcode" aria-hidden="true"></div>' +
-            '<div class="receipt-no">No. ' + receiptNo + ' — thanks for shopping</div>' +
+          '<div class="acc-body' + (expanded ? ' open' : '') + '" data-body="' + id + '"><div>' + bodyHtml +
+            '<div class="barcode" aria-hidden="true"></div><div class="receipt-no">No. ' + receiptNo + ' — thanks for shopping</div>' +
           '</div></div>' +
         '</div>'
       );
@@ -323,87 +326,137 @@
     function formatUpdated(iso) {
       if (!iso) return 'prices from GroceryPulse';
       const d = new Date(iso);
-      const opts = { weekday: 'short', month: 'short', day: 'numeric' };
-      return 'prices checked ' + d.toLocaleDateString('en-CA', opts);
+      return 'prices checked ' + d.toLocaleDateString('en-CA', { weekday: 'short', month: 'short', day: 'numeric' });
     }
 
-    async function main() {
-      let items, stores, generatedAt, storeCfg, tierDefaults;
-      try {
-        const [dataRes, cfgRes] = await Promise.all([
-          fetch('./data.json', { cache: 'no-store' }),
-          fetch('./stores-config.json', { cache: 'no-store' }),
-        ]);
-        const data = await dataRes.json();
-        const cfg = await cfgRes.json();
-        items = data.items;
-        stores = data.stores;
-        generatedAt = data.generatedAt;
-        storeCfg = cfg.stores;
-        tierDefaults = cfg.tierDefaults;
-      } catch (e) {
-        document.getElementById('cards').innerHTML = '<div class="loading">Could not load data.json / stores-config.json — make sure both sit next to index.html.</div>';
+    let itemsMeta = [], stores = [], generatedAt = null, storeCfg = {}, tierDefaults = {}, homeStore = 'Superstore', halalExcluded = new Set();
+    let selections = {};
+
+    function renderListpad() {
+      const rows = itemsMeta.map((item) => {
+        const s = selections[item.name];
+        return (
+          '<div class="list-row">' +
+            '<label class="list-check">' +
+              '<input type="checkbox" data-check="' + item.name + '" ' + (s.included ? 'checked' : '') + ' />' +
+              '<span class="list-name' + (s.included ? '' : ' off') + '">' + item.name + '</span>' +
+            '</label>' +
+            '<span class="qty-stepper">' +
+              '<button type="button" class="qty-btn" data-dec="' + item.name + '" aria-label="Decrease quantity">−</button>' +
+              '<input type="number" class="qty-input num" min="0" inputmode="numeric" value="' + s.qty + '" data-qty="' + item.name + '" aria-label="Quantity" />' +
+              '<button type="button" class="qty-btn" data-inc="' + item.name + '" aria-label="Increase quantity">+</button>' +
+            '</span>' +
+          '</div>'
+        );
+      }).join('');
+      document.getElementById('listpad-body').innerHTML = rows;
+      const count = itemsMeta.filter((i) => selections[i.name].included && selections[i.name].qty > 0).length;
+      document.getElementById('listpad-count').textContent = count + ' of ' + itemsMeta.length + ' items selected';
+
+      document.querySelectorAll('[data-check]').forEach((el) => {
+        el.addEventListener('change', () => {
+          const name = el.getAttribute('data-check');
+          selections[name].included = el.checked;
+          if (el.checked && selections[name].qty === 0) selections[name].qty = 1;
+          onSelectionsChanged();
+        });
+      });
+      document.querySelectorAll('[data-qty]').forEach((el) => {
+        el.addEventListener('change', () => {
+          const name = el.getAttribute('data-qty');
+          let v = parseInt(el.value, 10);
+          if (isNaN(v) || v < 0) v = 0;
+          selections[name].qty = v;
+          if (v === 0) selections[name].included = false;
+          onSelectionsChanged();
+        });
+      });
+      document.querySelectorAll('[data-inc]').forEach((el) => {
+        el.addEventListener('click', () => bump(el.getAttribute('data-inc'), 1));
+      });
+      document.querySelectorAll('[data-dec]').forEach((el) => {
+        el.addEventListener('click', () => bump(el.getAttribute('data-dec'), -1));
+      });
+    }
+
+    function bump(name, delta) {
+      const s = selections[name];
+      s.qty = Math.max(0, (s.qty || 0) + delta);
+      s.included = s.qty > 0;
+      onSelectionsChanged();
+    }
+
+    function onSelectionsChanged() {
+      saveSelections(selections);
+      renderListpad();
+      renderReceipts();
+    }
+
+    function renderReceipts() {
+      const activeItems = itemsMeta
+        .filter((i) => selections[i.name].included && selections[i.name].qty > 0)
+        .map((i) => ({ ...i, qty: selections[i.name].qty }));
+
+      const cardsEl = document.getElementById('cards');
+      const existingFoot = document.querySelector('.footnote');
+      if (existingFoot) existingFoot.remove();
+
+      document.getElementById('meta-line').textContent =
+        activeItems.length + ' of ' + itemsMeta.length + ' items on the list, ' + formatUpdated(generatedAt) + '.';
+
+      if (activeItems.length === 0) {
+        cardsEl.innerHTML = '<div class="empty-msg">Nothing selected yet — check off items above to see totals.</div>';
         return;
       }
 
-      const halalExcluded = applyHalalFilter(items, storeCfg);
       const naLabelFor = (name, store) => halalExcluded.has(name + '||' + store) ? 'no halal option' : 'not carried';
 
-      document.getElementById('meta-line').textContent =
-        items.length + ' items on the list, ' + formatUpdated(generatedAt) + '.';
-
-      const homeEntry = Object.entries(storeCfg).find(([, c]) => c.tier === 'home');
-      const homeStore = homeEntry ? homeEntry[0] : 'Superstore';
-
-      const home = computeStoreTotal(items, stores, homeStore);
-      const candidates = stores.filter((s) => s !== homeStore).map((s) => ({ store: s, ...computeStoreTotal(items, stores, s) }));
+      const home = computeStoreTotal(activeItems, homeStore);
+      const candidates = stores.filter((s) => s !== homeStore).map((s) => ({ store: s, ...computeStoreTotal(activeItems, s) }));
       const complete = candidates.filter((c) => c.missing === 0).sort((a, b) => a.total - b.total);
-      const cheapestSingle = complete[0];
-      const mix = computeMixAndMatch(items, stores, storeCfg, tierDefaults);
+      const cheapestSingle = complete[0] || candidates.slice().sort((a, b) => a.missing - b.missing || a.total - b.total)[0];
+      const mix = computeMixAndMatch(activeItems, stores, storeCfg, tierDefaults, homeStore);
 
       const savingsSingle = home.total - cheapestSingle.total;
       const savingsMix = home.total - mix.total;
-      const pctSingle = Math.round((savingsSingle / home.total) * 100);
-      const pctMix = Math.round((savingsMix / home.total) * 100);
+      const pctSingle = home.total ? Math.round((savingsSingle / home.total) * 100) : 0;
+      const pctMix = home.total ? Math.round((savingsMix / home.total) * 100) : 0;
 
-      const homeBody = items.map((i) => itemRowHtml(i.name, i.qty || 1, i.prices[homeStore], (i.prices[homeStore] || 0) * (i.qty || 1), false, naLabelFor(i.name, homeStore))).join('');
-      const cheapestBody = items.map((i) => itemRowHtml(i.name, i.qty || 1, i.prices[cheapestSingle.store], (i.prices[cheapestSingle.store] || 0) * (i.qty || 1), false, naLabelFor(i.name, cheapestSingle.store))).join('');
+      const homeBody = activeItems.map((i) => itemRowHtml(i.name, i.qty, i.prices[homeStore], (i.prices[homeStore] || 0) * i.qty, false, naLabelFor(i.name, homeStore))).join('');
+      const cheapestBody = activeItems.map((i) => itemRowHtml(i.name, i.qty, i.prices[cheapestSingle.store], (i.prices[cheapestSingle.store] || 0) * i.qty, false, naLabelFor(i.name, cheapestSingle.store))).join('');
 
       const mixBody = mix.groups.map((g) => {
         const rowsHtml = g.rows.map((r) => itemRowHtml(r.name, r.qty, r.unit, r.lineTotal, true)).join('');
         const justifyHtml = g.justify
           ? '<div class="group-justify">saved ' + fmt(g.justify.storeSavings) + ' — clears the ' + fmt(g.justify.threshold) + ' needed for a ' + g.justify.tierLabel.toLowerCase() + '</div>'
-          : (g.isHome ? '' : '');
+          : '';
         return (
           '<div class="group">' +
             '<div class="group-head">' +
               '<div class="group-head-left">' +
-                '<div class="group-head-top">' + PIN_SVG +
-                  '<span class="group-store">' + g.store + (g.isHome ? ' (your regular stop)' : '') + '</span>' +
-                '</div>' +
+                '<div class="group-head-top">' + PIN_SVG + '<span class="group-store">' + g.store + (g.isHome ? ' (your regular stop)' : '') + '</span></div>' +
                 '<span class="group-count">' + g.rows.length + ' item' + (g.rows.length > 1 ? 's' : '') + '</span>' +
                 justifyHtml +
               '</div>' +
               '<span class="group-subtotal num">' + fmt(g.subtotal) + '</span>' +
-            '</div>' +
-            rowsHtml +
+            '</div>' + rowsHtml +
           '</div>'
         );
       }).join('') + '<div class="grand-total"><span>Grand total</span><span class="num">' + fmt(mix.total) + '</span></div>';
 
       const html =
-        receiptHtml(homeStore.toLowerCase(), homeStore, 'All ' + items.length + ' items in one trip', home.total, null, homeBody, false, '001') +
-        receiptHtml('cheapest', cheapestSingle.store, 'All ' + items.length + ' items, lowest single-store total', cheapestSingle.total, savingsSingle > 0 ? ('Save ' + fmt(savingsSingle) + ' (' + pctSingle + '%)') : null, cheapestBody, false, '002') +
+        receiptHtml(homeStore.toLowerCase(), homeStore, 'All ' + activeItems.length + ' items in one trip', home.total, null, homeBody, false, '001') +
+        receiptHtml('cheapest', cheapestSingle.store, 'All ' + activeItems.length + ' items, lowest single-store total', cheapestSingle.total, savingsSingle > 0 ? ('Save ' + fmt(savingsSingle) + ' (' + pctSingle + '%)') : null, cheapestBody, false, '002') +
         receiptHtml('mix', 'Worth-the-drive split', mix.storeCount + ' stop' + (mix.storeCount > 1 ? 's' : '') + ' — only detours that pay for themselves', mix.total, savingsMix > 0 ? ('Save ' + fmt(savingsMix) + ' (' + pctMix + '%)') : null, mixBody, true, '003');
 
-      document.getElementById('cards').innerHTML = html;
+      cardsEl.innerHTML = html;
 
       let footnote = 'Only stores whose total basket savings clear their distance threshold get a special trip — everything else just rides along at ' + homeStore + '.';
       if (mix.almost.length) {
         const a = mix.almost.sort((x, y) => (y.storeSavings - y.threshold) - (x.storeSavings - x.threshold))[0];
         footnote += ' ' + a.store + ' came close — ' + fmt(a.storeSavings) + ' saved, ' + fmt(a.threshold) + ' needed.';
       }
-      document.getElementById('cards').insertAdjacentHTML('afterend', '<p class="footnote">' + footnote + '</p>');
+      cardsEl.insertAdjacentHTML('afterend', '<p class="footnote">' + footnote + '</p>');
 
       document.querySelectorAll('[data-toggle]').forEach((btn) => {
         btn.addEventListener('click', () => {
@@ -423,6 +476,44 @@
       body.classList.toggle('open', open);
       if (chev) chev.classList.toggle('open', open);
       if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    async function main() {
+      try {
+        const [dataRes, cfgRes] = await Promise.all([
+          fetch('./data.json', { cache: 'no-store' }),
+          fetch('./stores-config.json', { cache: 'no-store' }),
+        ]);
+        const data = await dataRes.json();
+        const cfg = await cfgRes.json();
+        itemsMeta = data.items;
+        stores = data.stores;
+        generatedAt = data.generatedAt;
+        storeCfg = cfg.stores;
+        tierDefaults = cfg.tierDefaults;
+      } catch (e) {
+        document.getElementById('cards').innerHTML = '<div class="loading">Could not load data.json / stores-config.json — make sure both sit next to index.html.</div>';
+        return;
+      }
+
+      halalExcluded = applyHalalFilter(itemsMeta, storeCfg);
+      const homeEntry = Object.entries(storeCfg).find(([, c]) => c.tier === 'home');
+      homeStore = homeEntry ? homeEntry[0] : 'Superstore';
+
+      selections = loadSelections(itemsMeta);
+
+      document.getElementById('listpad').style.display = '';
+      document.getElementById('select-all').addEventListener('click', () => {
+        for (const item of itemsMeta) { selections[item.name].included = true; if (selections[item.name].qty === 0) selections[item.name].qty = item.qty || 1; }
+        onSelectionsChanged();
+      });
+      document.getElementById('clear-all').addEventListener('click', () => {
+        for (const item of itemsMeta) selections[item.name].included = false;
+        onSelectionsChanged();
+      });
+
+      renderListpad();
+      renderReceipts();
     }
 
     main();
