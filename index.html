@@ -202,9 +202,7 @@
       return halalExcluded;
     }
 
-    function loadSelections(itemsMeta) {
-      let saved = null;
-      try { saved = JSON.parse(localStorage.getItem(SEL_KEY) || 'null'); } catch (e) { saved = null; }
+    function normalizeSelections(saved, itemsMeta) {
       const sel = {};
       for (const item of itemsMeta) {
         const s = saved && saved[item.name];
@@ -212,13 +210,55 @@
       }
       return sel;
     }
-    function saveSelections(sel) { try { localStorage.setItem(SEL_KEY, JSON.stringify(sel)); } catch (e) {} }
+    function loadSelections(itemsMeta) {
+      let saved = null;
+      try { saved = JSON.parse(localStorage.getItem(SEL_KEY) || 'null'); } catch (e) { saved = null; }
+      return normalizeSelections(saved, itemsMeta);
+    }
+    function saveSelections(sel) { try { localStorage.setItem(SEL_KEY, JSON.stringify(sel)); } catch (e) {} pushRemoteState(); }
     function loadSession() { try { return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch (e) { return null; } }
-    function saveSession(s) { try { s ? localStorage.setItem(SESSION_KEY, JSON.stringify(s)) : localStorage.removeItem(SESSION_KEY); } catch (e) {} }
+    function saveSession(s) { try { s ? localStorage.setItem(SESSION_KEY, JSON.stringify(s)) : localStorage.removeItem(SESSION_KEY); } catch (e) {} pushRemoteState(); }
     function loadLastTrip() { try { return JSON.parse(localStorage.getItem(LAST_TRIP_KEY) || 'null'); } catch (e) { return null; } }
-    function saveLastTrip(s) { try { s ? localStorage.setItem(LAST_TRIP_KEY, JSON.stringify(s)) : localStorage.removeItem(LAST_TRIP_KEY); } catch (e) {} }
+    function saveLastTrip(s) { try { s ? localStorage.setItem(LAST_TRIP_KEY, JSON.stringify(s)) : localStorage.removeItem(LAST_TRIP_KEY); } catch (e) {} pushRemoteState(); }
     function loadJustFinished() { try { return JSON.parse(localStorage.getItem(JUST_FINISHED_KEY) || 'null'); } catch (e) { return null; } }
-    function saveJustFinished(s) { try { s ? localStorage.setItem(JUST_FINISHED_KEY, JSON.stringify(s)) : localStorage.removeItem(JUST_FINISHED_KEY); } catch (e) {} }
+    function saveJustFinished(s) { try { s ? localStorage.setItem(JUST_FINISHED_KEY, JSON.stringify(s)) : localStorage.removeItem(JUST_FINISHED_KEY); } catch (e) {} pushRemoteState(); }
+
+    // Local-only writes (no remote push) — used when we just pulled this
+    // exact state down from the server, so echoing it straight back up
+    // would be a wasted round trip.
+    function saveSelectionsLocalOnly(sel) { try { localStorage.setItem(SEL_KEY, JSON.stringify(sel)); } catch (e) {} }
+    function saveSessionLocalOnly(s) { try { s ? localStorage.setItem(SESSION_KEY, JSON.stringify(s)) : localStorage.removeItem(SESSION_KEY); } catch (e) {} }
+    function saveLastTripLocalOnly(s) { try { s ? localStorage.setItem(LAST_TRIP_KEY, JSON.stringify(s)) : localStorage.removeItem(LAST_TRIP_KEY); } catch (e) {} }
+    function saveJustFinishedLocalOnly(s) { try { s ? localStorage.setItem(JUST_FINISHED_KEY, JSON.stringify(s)) : localStorage.removeItem(JUST_FINISHED_KEY); } catch (e) {} }
+
+    // --- cross-device sync (Netlify Blobs, via one serverless function) ---
+    // localStorage above is per-browser, so it can never follow you from
+    // laptop to phone. This pushes the same four pieces of state to a tiny
+    // shared endpoint on every save, and pulls it once on load — so opening
+    // the app on another device picks up wherever the last save left off.
+    // There's no login on this endpoint: anyone with your site's URL could
+    // technically read or overwrite it. Fine for a personal grocery list,
+    // worth knowing if that ever changes.
+    const STATE_API_URL = '/api/state';
+
+    async function fetchRemoteState() {
+      try {
+        const res = await fetch(STATE_API_URL, { cache: 'no-store' });
+        if (!res.ok) return null;
+        return await res.json();
+      } catch (e) {
+        return null; // offline, or the function isn't deployed yet — caller falls back to localStorage
+      }
+    }
+
+    function pushRemoteState() {
+      const payload = { selections, session, lastTrip, justFinished };
+      fetch(STATE_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      }).catch(() => { /* offline — localStorage above still keeps this device going */ });
+    }
 
     function computeStoreTotal(items, store) {
       let total = 0, missing = 0;
@@ -632,10 +672,28 @@
       const homeEntry = Object.entries(storeCfg).find(([, c]) => c.tier === 'home');
       homeStore = homeEntry ? homeEntry[0] : 'Superstore';
 
+      // Local copies first (instant, and the fallback if we're offline or
+      // the sync function isn't deployed), then let the shared remote state
+      // — if reachable — override them so every device agrees on where the
+      // trip currently stands.
       selections = loadSelections(itemsMeta);
       session = loadSession();
       lastTrip = loadLastTrip();
       justFinished = session ? null : loadJustFinished();
+
+      const remote = await fetchRemoteState();
+      if (remote) {
+        if (remote.selections) selections = normalizeSelections(remote.selections, itemsMeta);
+        if ('session' in remote) session = remote.session;
+        if ('lastTrip' in remote) lastTrip = remote.lastTrip;
+        justFinished = session ? null : (('justFinished' in remote) ? remote.justFinished : justFinished);
+        // Keep this device's local cache in step so a later offline visit
+        // still resumes here instead of an older on-device save.
+        saveSelectionsLocalOnly(selections);
+        saveSessionLocalOnly(session);
+        saveLastTripLocalOnly(lastTrip);
+        saveJustFinishedLocalOnly(justFinished);
+      }
 
       render();
     }
