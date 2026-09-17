@@ -9,7 +9,7 @@
 //   - Drops the Sobeys column (tracked by GroceryPulse, not part of this
 //     comparison)
 //   - Skips items you've deliberately excluded (see EXCLUDE_ITEMS below)
-//   - Preserves per-item metadata (like requiresHalal) across runs
+//   - Preserves per-item metadata (requiresHalal, qty) across runs
 //   - Carries forward stale data (flagged with staleSince) for any
 //     tracked item that didn't show up in this week's scrape, instead of
 //     silently losing it
@@ -129,6 +129,7 @@ function main() {
     const item = { name, prices };
     const oldItem = oldByCurrentName.get(name);
     if (oldItem && oldItem.requiresHalal) item.requiresHalal = true;
+    if (oldItem && oldItem.qty != null) item.qty = oldItem.qty;
     newItems.push(item);
   }
 
@@ -142,6 +143,7 @@ function main() {
       staleSince: oldItem.staleSince || oldData.generatedAt,
     };
     if (oldItem.requiresHalal) item.requiresHalal = true;
+    if (oldItem.qty != null) item.qty = oldItem.qty;
     newItems.push(item);
     console.warn(`Warning: "${name}" was not in this week's scrape -- carrying forward stale price data. If it was renamed on GroceryPulse, add it to RENAMED_ITEMS in this script.`);
   }
