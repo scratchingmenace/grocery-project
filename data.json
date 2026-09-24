@@ -14,11 +14,11 @@
       "prices": {
         "Food Basics": null,
         "FreshCo": 6.44,
-        "Giant Tiger": 6.28,
-        "Loblaws": 6.44,
+        "Giant Tiger": 6.46,
+        "Loblaws": 6,
         "Metro": 8.16,
         "No Frills": 6.25,
-        "Superstore": 4.98
+        "Superstore": 6.44
       }
     },
     {
@@ -27,8 +27,8 @@
         "Food Basics": 5.99,
         "FreshCo": 5.99,
         "Giant Tiger": 4.87,
-        "Loblaws": 5.99,
-        "Metro": 5.99,
+        "Loblaws": 4.99,
+        "Metro": 6.49,
         "No Frills": 4.99,
         "Superstore": 5.99
       }
@@ -36,19 +36,19 @@
     {
       "name": "Cheddar Cheese, Medium, 400g",
       "prices": {
-        "Food Basics": 4.88,
+        "Food Basics": 4.98,
         "FreshCo": 5,
         "Giant Tiger": 4.87,
-        "Loblaws": 6.79,
+        "Loblaws": 6.5,
         "Metro": 5.74,
         "No Frills": 4.99,
-        "Superstore": 5.97
+        "Superstore": 5.49
       }
     },
     {
       "name": "Cream Cheese, 250g",
       "prices": {
-        "Food Basics": 3.19,
+        "Food Basics": 3.98,
         "FreshCo": 2.99,
         "Giant Tiger": 3.97,
         "Loblaws": 3.99,
@@ -63,10 +63,10 @@
         "Food Basics": 12.5,
         "FreshCo": 13.5,
         "Giant Tiger": 11.03,
-        "Loblaws": 10.76,
-        "Metro": 13.21,
-        "No Frills": 13.21,
-        "Superstore": 10.76
+        "Loblaws": 18.8,
+        "Metro": 20.92,
+        "No Frills": 15,
+        "Superstore": 18.28
       },
       "requiresHalal": true
     },
@@ -77,9 +77,9 @@
         "FreshCo": 7.5,
         "Giant Tiger": 11.59,
         "Loblaws": 11.9,
-        "Metro": 13.87,
+        "Metro": null,
         "No Frills": 7.47,
-        "Superstore": 10.34
+        "Superstore": 7.69
       },
       "requiresHalal": true
     },
@@ -87,34 +87,34 @@
       "name": "White Bread, 675g",
       "prices": {
         "Food Basics": 2.48,
-        "FreshCo": 2.48,
+        "FreshCo": 2,
         "Giant Tiger": 1.97,
-        "Loblaws": 3.99,
+        "Loblaws": 3.5,
         "Metro": 3.19,
         "No Frills": 2.5,
-        "Superstore": 3
+        "Superstore": 2.5
       }
     },
     {
       "name": "Whole Wheat Bread, 675g",
       "prices": {
         "Food Basics": 2.48,
-        "FreshCo": 2.48,
+        "FreshCo": 2,
         "Giant Tiger": 1.97,
         "Loblaws": 2.48,
-        "Metro": 4.49,
+        "Metro": 3.19,
         "No Frills": 2.48,
-        "Superstore": 2.45
+        "Superstore": 2.5
       }
     },
     {
       "name": "Hamburger Buns, 8-pack",
       "prices": {
         "Food Basics": 7.99,
-        "FreshCo": 2.69,
-        "Giant Tiger": 2.5,
-        "Loblaws": 3.29,
-        "Metro": 6.29,
+        "FreshCo": 3.49,
+        "Giant Tiger": 2.25,
+        "Loblaws": 3.49,
+        "Metro": 4.69,
         "No Frills": 2.29,
         "Superstore": 2.25
       }
@@ -134,11 +134,11 @@
     {
       "name": "Apples, ~2kg Bag",
       "prices": {
-        "Food Basics": 2.98,
+        "Food Basics": 4.99,
         "FreshCo": 4.99,
-        "Giant Tiger": 2.44,
-        "Loblaws": 8,
-        "Metro": 2.99,
+        "Giant Tiger": 3.97,
+        "Loblaws": 4,
+        "Metro": 2.97,
         "No Frills": 4.99,
         "Superstore": 8
       }
@@ -147,12 +147,12 @@
       "name": "Strawberries, 454g",
       "prices": {
         "Food Basics": 4.99,
-        "FreshCo": 6.99,
+        "FreshCo": 4.99,
         "Giant Tiger": 3.97,
         "Loblaws": 5.99,
-        "Metro": 5.99,
+        "Metro": 4.99,
         "No Frills": 4.97,
-        "Superstore": 5.99
+        "Superstore": 5.5
       }
     },
     {
@@ -160,10 +160,10 @@
       "prices": {
         "Food Basics": 4.39,
         "FreshCo": 3.06,
-        "Giant Tiger": 2.92,
+        "Giant Tiger": 2.12,
         "Loblaws": 3.86,
         "Metro": 2.8,
-        "No Frills": 3.3,
+        "No Frills": 3.7,
         "Superstore": 3.9
       }
     },
@@ -172,11 +172,11 @@
       "prices": {
         "Food Basics": 3.99,
         "FreshCo": 4.99,
-        "Giant Tiger": 3.97,
-        "Loblaws": 4.75,
-        "Metro": 4.99,
+        "Giant Tiger": 4.84,
+        "Loblaws": 4.5,
+        "Metro": 3.99,
         "No Frills": 3.99,
-        "Superstore": 5
+        "Superstore": 4.5
       }
     },
     {
@@ -185,34 +185,34 @@
         "Food Basics": 5.98,
         "FreshCo": 6.99,
         "Giant Tiger": 3.94,
-        "Loblaws": 5,
+        "Loblaws": 2,
         "Metro": 6.99,
         "No Frills": 3.99,
-        "Superstore": 5
+        "Superstore": 2
       }
     },
     {
       "name": "Onions, 3lb Bag",
       "prices": {
-        "Food Basics": 2.99,
-        "FreshCo": 1.79,
+        "Food Basics": 1.99,
+        "FreshCo": 1.44,
         "Giant Tiger": 1.47,
-        "Loblaws": 1.5,
+        "Loblaws": 4,
         "Metro": 1.99,
-        "No Frills": 2.99,
+        "No Frills": 3.49,
         "Superstore": 3
       }
     },
     {
       "name": "Carrots, 2lb Bag",
       "prices": {
-        "Food Basics": 2.99,
-        "FreshCo": 2.49,
+        "Food Basics": 3.99,
+        "FreshCo": 3.73,
         "Giant Tiger": 1.47,
-        "Loblaws": 1.5,
+        "Loblaws": 3.5,
         "Metro": 1.99,
         "No Frills": 2.99,
-        "Superstore": 3
+        "Superstore": 3.49
       }
     },
     {
@@ -222,8 +222,8 @@
         "FreshCo": 6.35,
         "Giant Tiger": 2.94,
         "Loblaws": 2.5,
-        "Metro": 2.99,
-        "No Frills": 1.44,
+        "Metro": 2.69,
+        "No Frills": 1.99,
         "Superstore": 2
       }
     },
@@ -233,18 +233,18 @@
         "Food Basics": 5.49,
         "FreshCo": 6.55,
         "Giant Tiger": 4.23,
-        "Loblaws": 3.31,
-        "Metro": 8.8,
-        "No Frills": 4.39,
-        "Superstore": 4.41
+        "Loblaws": 5.51,
+        "Metro": 6.1,
+        "No Frills": 2.18,
+        "Superstore": 2.18
       }
     },
     {
       "name": "Romaine Lettuce, per Head",
       "prices": {
-        "Food Basics": 2.99,
+        "Food Basics": 2.88,
         "FreshCo": 2.47,
-        "Giant Tiger": 3.97,
+        "Giant Tiger": 2.44,
         "Loblaws": 3,
         "Metro": 1.99,
         "No Frills": 2.49,
@@ -252,5 +252,5 @@
       }
     }
   ],
-  "generatedAt": "2026-09-17T21:05:08.160Z"
+  "generatedAt": "2026-09-24T21:05:09.168Z"
 }
