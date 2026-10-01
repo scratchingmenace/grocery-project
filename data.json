@@ -24,7 +24,7 @@
     {
       "name": "Butter, Salted, 454g",
       "prices": {
-        "Food Basics": 5.99,
+        "Food Basics": 4.88,
         "FreshCo": 5.99,
         "Giant Tiger": 4.87,
         "Loblaws": 5.99,
@@ -36,7 +36,7 @@
     {
       "name": "Cheddar Cheese, Medium, 400g",
       "prices": {
-        "Food Basics": 4.98,
+        "Food Basics": 3.98,
         "FreshCo": 5,
         "Giant Tiger": 4.87,
         "Loblaws": 4.99,
@@ -60,11 +60,11 @@
     {
       "name": "Chicken Breast, Boneless Skinless, per kg",
       "prices": {
-        "Food Basics": 12.5,
+        "Food Basics": 14.07,
         "FreshCo": 13.5,
         "Giant Tiger": 11.03,
         "Loblaws": 18.8,
-        "Metro": 20.92,
+        "Metro": 19.99,
         "No Frills": 10.76,
         "Superstore": 14
       },
@@ -102,7 +102,7 @@
         "FreshCo": 2.48,
         "Giant Tiger": 1.97,
         "Loblaws": 2.48,
-        "Metro": 3.19,
+        "Metro": 3.99,
         "No Frills": 2.48,
         "Superstore": 2.5
       }
@@ -134,11 +134,11 @@
     {
       "name": "Apples, ~2kg Bag",
       "prices": {
-        "Food Basics": 4.99,
+        "Food Basics": 5.99,
         "FreshCo": 4.99,
         "Giant Tiger": 3.97,
         "Loblaws": 8,
-        "Metro": 2.97,
+        "Metro": 2.99,
         "No Frills": 4.99,
         "Superstore": 8
       }
@@ -150,7 +150,7 @@
         "FreshCo": 6.99,
         "Giant Tiger": 3.97,
         "Loblaws": 5,
-        "Metro": 4.99,
+        "Metro": 5.99,
         "No Frills": 2.99,
         "Superstore": 4
       }
@@ -158,7 +158,7 @@
     {
       "name": "Oranges, per kg",
       "prices": {
-        "Food Basics": 4.39,
+        "Food Basics": 2.2,
         "FreshCo": 3.06,
         "Giant Tiger": 2.92,
         "Loblaws": 4.4,
@@ -174,7 +174,7 @@
         "FreshCo": 4.99,
         "Giant Tiger": 4.84,
         "Loblaws": 3,
-        "Metro": 3.99,
+        "Metro": 4.99,
         "No Frills": 3.99,
         "Superstore": 5
       }
@@ -194,7 +194,7 @@
     {
       "name": "Onions, 3lb Bag",
       "prices": {
-        "Food Basics": 1.99,
+        "Food Basics": 0.99,
         "FreshCo": 1.79,
         "Giant Tiger": 1.47,
         "Loblaws": 3,
@@ -206,7 +206,7 @@
     {
       "name": "Carrots, 2lb Bag",
       "prices": {
-        "Food Basics": 3.99,
+        "Food Basics": 0.99,
         "FreshCo": 2.99,
         "Giant Tiger": 1.47,
         "Loblaws": 3,
@@ -218,11 +218,11 @@
     {
       "name": "Broccoli, per Head or Crown",
       "prices": {
-        "Food Basics": 2.5,
+        "Food Basics": 0.99,
         "FreshCo": 6.59,
         "Giant Tiger": 2.94,
         "Loblaws": 2.5,
-        "Metro": 2.69,
+        "Metro": 2.99,
         "No Frills": 1.49,
         "Superstore": 1.49
       }
@@ -234,7 +234,7 @@
         "FreshCo": 6.55,
         "Giant Tiger": 4.23,
         "Loblaws": 5.51,
-        "Metro": 6.1,
+        "Metro": 8.8,
         "No Frills": 5.1,
         "Superstore": 4.41
       }
@@ -242,7 +242,7 @@
     {
       "name": "Romaine Lettuce, per Head",
       "prices": {
-        "Food Basics": 2.88,
+        "Food Basics": 2.99,
         "FreshCo": 2.47,
         "Giant Tiger": 3.97,
         "Loblaws": 3,
@@ -252,5 +252,5 @@
       }
     }
   ],
-  "generatedAt": "2026-10-01T19:42:28.407Z"
+  "generatedAt": "2026-10-01T21:04:57.107Z"
 }
